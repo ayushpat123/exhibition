@@ -1,13 +1,13 @@
-import logo from './logo.svg';
 import './App.css';
+import Art1 from './sketches/Art1';
 
 function App() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <Art1 />
         <p>
-          Edit <code>src/App.js</code> and save to reload.
+          Noisy Day
         </p>
         <a
           className="App-link"
@@ -17,6 +17,7 @@ function App() {
         >
           Learn React
         </a>
+        
       </header>
     </div>
   );
