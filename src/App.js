@@ -6,19 +6,11 @@ function App() {
   return (
     <div className="App">
       <header className="App-header">
+        <Art1 />
         <Art2 />
         <p>
-          Noisy Day
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        
+          Generative Art
+        </p>        
       </header>
     </div>
   );
