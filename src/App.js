@@ -5,11 +5,15 @@ import CardItem from './components/CardItem';
 function App() {
   return (
     <div className="App">
-
-        <CardItem number={1} name="Noisy Day"/>
+      <div className="App-header">
+        Exhibition
+      </div>
+      <div className="wrapper">
+        <CardItem number={1} name="Waveform"/>
         <CardItem number={2} name="Drops"/>
-
+      </div>
     </div>
+    
   );
 }
 

@@ -20,7 +20,7 @@ const Art2 = (props) => {
       let j = p5.random(3);
       for(let i=0;i<=j;i++){
           // p5.fill(p5.random(256),0,0);
-          p5.fill(p5.random(256));
+          p5.fill(p5.random(256), p5.random(100));
           p5.circle(p5.random(canvasWidth), p5.random(canvasHeight), p5.random(size));
       }      
   };
