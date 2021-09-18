@@ -1,7 +1,7 @@
 
 .card{
     overflow: hidden;
-    padding: 1rem 0rem 0rem 0rem;
+    padding: 0rem 0rem 0rem 0rem;
     box-shadow: 0 2px 20px grey;
     border-radius: 0.2rem;
     display: flex;
@@ -12,7 +12,7 @@
 }
 
 .card__title{
-    padding: 1rem;
+    padding: 0.5rem;
 }
 
 .card:hover{
