@@ -12,7 +12,8 @@
 }
 
 .card__title{
-    padding: 0.5rem;
+    font-weight: bold;
+    padding: 0rem;
 }
 
 .card:hover{

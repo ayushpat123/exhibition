@@ -13,7 +13,7 @@ function CardItem(props) {
                 <Suspense fallback={<div>Art</div>}>
                     <Art />
                 </Suspense>
-                <h2 className="card__title">{props.name}</h2>
+                <h5 className="card__title">{props.name}</h5>
             </div>
         </div>
     )
