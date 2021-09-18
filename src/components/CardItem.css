@@ -1,0 +1,23 @@
+
+.card{
+    overflow: hidden;
+    padding: 1rem 0rem 0rem 0rem;
+    box-shadow: 0 2px 20px grey;
+    border-radius: 0.2rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    cursor: pointer;
+    transition: transform 200ms ease-in;
+}
+
+.card__title{
+    padding: 1rem;
+}
+
+.card:hover{
+    transform: scale(1.02);
+}
+
+
+

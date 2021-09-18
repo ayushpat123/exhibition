@@ -5,10 +5,6 @@ const canvasWidth = 300;
 const canvasHeight = 300;
 
 const size = 15;
-
-// Included in index.html
-// This is an alternative to p5.js builtin 'noise' function,
-// It provides 4D noise and returns a value between -1 and 1
   
 const Art2 = (props) => {
   const setup = (p5, canvasParentRef) => {
@@ -23,7 +19,8 @@ const Art2 = (props) => {
   const draw = (p5) => {
       let j = p5.random(3);
       for(let i=0;i<=j;i++){
-          p5.fill(p5.random(256),0,0);
+          // p5.fill(p5.random(256),0,0);
+          p5.fill(p5.random(256));
           p5.circle(p5.random(canvasWidth), p5.random(canvasHeight), p5.random(size));
       }      
   };
