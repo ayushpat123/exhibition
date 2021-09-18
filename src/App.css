@@ -11,7 +11,7 @@ body{
 .wrapper {
   display: grid;
   font: Roboto;
-  margin: 2rem;
+  margin: 2rem 0rem 0rem 0rem;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 18rem));
   gap: 4rem;
   text-align: center;
