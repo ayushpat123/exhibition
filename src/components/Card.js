@@ -1,7 +1,7 @@
 import React, { Suspense } from 'react';
-import './CardItem.css';
+import './Card.css';
 
-function CardItem(props) {
+function Card(props) {
 
     var artNum = props.number;
     var a = artNum.toString();
@@ -13,10 +13,10 @@ function CardItem(props) {
                 <Suspense fallback={<div>Art</div>}>
                     <Art />
                 </Suspense>
-                <h5 className="card__title">{props.name}</h5>
+                {/* <h6 className="card__title">{props.name}</h6> */}
             </div>
         </div>
     )
 }
 
-export default CardItem
+export default Card

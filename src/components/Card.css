@@ -1,24 +1,31 @@
 
 .card{
     overflow: hidden;
+    max-height: 300px;
     padding: 0rem 0rem 0rem 0rem;
     box-shadow: 0 2px 20px grey;
     border-radius: 0.2rem;
     display: flex;
+    align-items: center;
     flex-direction: column;
     justify-content: space-between;
     cursor: pointer;
     transition: transform 200ms ease-in;
+    color: rgba(255, 255, 255, 0.3);
 }
 
-.card__title{
+
+.card__title{ 
     font-weight: bold;
     padding: 0rem;
 }
 
+
 .card:hover{
     transform: scale(1.02);
 }
+
+
 
 
 

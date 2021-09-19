@@ -4,13 +4,13 @@ body{
 
 .App {
   min-height: 100vh;
-  background-color: white;
+  background-color: #FAF9FA;
 }
 
 .wrapper {
   display: grid;
   font: Roboto;
-  padding: 2rem 0rem 2rem 0rem;
+  padding: 2rem 5rem 2rem 5rem;
   grid-template-columns: repeat(auto-fit, minmax(12rem, 18rem));
   gap: 4rem;
   text-align: center;
