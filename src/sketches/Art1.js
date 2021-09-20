@@ -6,8 +6,7 @@ let minFrequency = 0.5;
 let maxFrequency = 2;
 let minAmplitude = 0.05;
 let maxAmplitude = 0.5;
-const canvasWidth = 300;
-const canvasHeight = 300;
+
 
 // Included in index.html
 // This is an alternative to p5.js builtin 'noise' function,
@@ -16,21 +15,31 @@ const simplex = new SimplexNoise();
 
   
 const Art1 = (props) => {
+  const canvasWidth = props.x;
+  const canvasHeight = props.y;
+
+  var offsetX; 
+  var offsetY; 
+
   const setup = (p5, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
     p5.createCanvas(canvasWidth, canvasHeight).parent(canvasParentRef);
 
-
-        p5.mouseX = canvasWidth / 2;
-        p5.mouseY = canvasHeight / 2;
+    p5.mouseX = canvasWidth / 2;
+    p5.mouseY = canvasHeight / 2;
   };
 
   const draw = (p5) => {
         p5.background(0);
   
-        const frequency = p5.lerp(minFrequency, maxFrequency, p5.mouseX / canvasWidth);
-        const amplitude = p5.lerp(minAmplitude, maxAmplitude, p5.mouseY / canvasHeight);
+        if(p5.mouseX <= canvasWidth && p5.mouseX >= 0 && p5.mouseY <= canvasHeight && p5.mouseY >= 0 ){
+          offsetX = p5.mouseX;
+          offsetY = p5.mouseY;
+        }
+        
+        const frequency = p5.lerp(minFrequency, maxFrequency, offsetX / canvasWidth);
+        const amplitude = p5.lerp(minAmplitude, maxAmplitude, offsetY / canvasHeight);
         
         const dim = Math.min(canvasWidth, canvasHeight);
         

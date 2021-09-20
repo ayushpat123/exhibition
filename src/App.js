@@ -40,7 +40,7 @@ function App() {
       </Navbar>
 
       <div className="wrapper" style={tempcss}>
-        <Card number={1}/>
+        <Card number={1} />
         <CardImage img={Pic1} pad='25' light={1}/>
         <Card number={2}/>
         <CardImage img={Pic2} pad='50'/>

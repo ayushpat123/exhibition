@@ -7,12 +7,20 @@ function Card(props) {
     var a = artNum.toString();
     var Art = React.lazy(() => import("../sketches/Art"+a));
     var dark = {backgroundColor:'#111214'};
-    
+    var x = 300;
+    var y = 300;
+    if (props.x) {
+        x = props.x;
+    }
+    if (props.y) {
+        y = props.y;
+    }
+
     return (
         <div className="card" style={dark}>
             <div className="card__body">
                 <Suspense fallback={<div>Art</div>}>
-                    <Art />
+                    <Art x={x} y={y}/>
                 </Suspense>
                 {/* <h6 className="card__title">{props.name}</h6> */}
             </div>
