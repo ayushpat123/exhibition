@@ -12,8 +12,11 @@ import useWindowDimensions from './components/Hook';
 
 
 function App() {
+
+
   const { width } = useWindowDimensions();
-  var tempcss
+  var tempcss;
+
   if (width < 600){
     tempcss = {gap: '2rem', padding: '1rem 1rem 2rem 1rem'};
   } else if (width < 900) {
