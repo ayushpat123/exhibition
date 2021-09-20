@@ -6,9 +6,10 @@ function Card(props) {
     var artNum = props.number;
     var a = artNum.toString();
     var Art = React.lazy(() => import("../sketches/Art"+a));
-
+    var dark = {backgroundColor:'#111214'};
+    
     return (
-        <div className="card">
+        <div className="card" style={dark}>
             <div className="card__body">
                 <Suspense fallback={<div>Art</div>}>
                     <Art />

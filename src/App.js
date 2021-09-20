@@ -40,10 +40,10 @@ function App() {
       </Navbar>
 
       <div className="wrapper" style={tempcss}>
-        <Card number={1} name="Waveform"/>
-        <CardImage img={Pic1} name="pic1" pad='25' dark={1}/>
-        <Card number={2} name="Drops"/>
-        <CardImage img={Pic2} name="pic2" pad='50' dark={1}/>
+        <Card number={1}/>
+        <CardImage img={Pic1} pad='25' light={1}/>
+        <Card number={2}/>
+        <CardImage img={Pic2} pad='50'/>
 
       </div>
     </div>
