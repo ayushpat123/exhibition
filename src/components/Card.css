@@ -1,7 +1,7 @@
 
 .card{
     overflow: hidden;
-    max-height: 300px;
+    height: 300px;
     padding: 0rem 0rem 0rem 0rem;
     box-shadow: 0 2px 20px grey;
     border-radius: 0.2rem;
