@@ -18,15 +18,25 @@ function App() {
   var tempcss;
   var gap = 50;
   var colGap = gap.toString()+'px';
+  var x=300;
+  var y=300;
 
-  if (width < 400){
+  if (width < 500){
     tempcss = {columnGap: colGap, padding: '1rem 0rem 2rem 0rem'};
+    x = 300;
+    y = 300;
   } else if (width < 900) {
     tempcss = {columnGap: colGap, padding: '1rem 1rem 2rem 1rem'};
+    x = 300;
+    y = 600;
   } else if (width < 1200) {
-    tempcss = {columnGap: colGap, padding: '2rem 1.5rem 2rem 1.5rem'};
+    tempcss = {columnGap: colGap, padding: '2rem 2rem 2rem 2rem'};
+    x = 300;
+    y = 600;
   } else {
     tempcss = {columnGap: colGap, padding: '2rem 5rem 4rem 5rem'};
+    x = 600;
+    y = 600;
   }
 
 
@@ -46,7 +56,7 @@ function App() {
       </Navbar>
 
       <div className="wrapper" style={tempcss}>
-        <Card number={1} y ={600}/>
+        <Card number={1} y = {y} x = {x}/>
         <CardImage img={Pic1} pad='25' />
         <Card number={2} />
         <CardImage img={Pic2} pad='50'/>
