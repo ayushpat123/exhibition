@@ -42,7 +42,8 @@ function App() {
 
   return (
     <div className="App">
-      <Navbar bg="light" sticky="top">
+      <Navbar bg="light">
+      {/* <Navbar bg="light" sticky="top"> */}
       <Container>
         <Navbar.Brand className="order-md-0 mx-auto order-1">
           <img
