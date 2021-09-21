@@ -21,7 +21,7 @@ function App() {
   var x=300;
   var y=300;
 
-  if (width < 500){
+  if (width < 400){
     tempcss = {columnGap: colGap, padding: '1rem 0rem 2rem 0rem'};
     x = 300;
     y = 300;

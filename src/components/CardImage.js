@@ -35,7 +35,7 @@ function CardImage(props) {
     if (props.light){
         light = {backgroundColor:'#F8F6F7', height: b, width: c, gridRowEnd: d, gridColumnEnd: f};
     }
-    var tempcss = {height: b, width: '100%', objectFit: 'cover', padding: pad};
+    var tempcss = {height: b, width: c, objectFit: 'cover', padding: pad};
     return (
         <div className="card" style={light}>
             <div className="card__body">
