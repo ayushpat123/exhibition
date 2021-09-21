@@ -16,13 +16,17 @@ function App() {
 
   const { width } = useWindowDimensions();
   var tempcss;
+  var gap = 50;
+  var colGap = gap.toString()+'px';
 
-  if (width < 600){
-    tempcss = {gap: '2rem', padding: '1rem 1rem 2rem 1rem'};
+  if (width < 400){
+    tempcss = {columnGap: colGap, padding: '1rem 0rem 2rem 0rem'};
   } else if (width < 900) {
-    tempcss = {gap: '3rem', padding: '2rem 1.5rem 2rem 1.5rem'};
+    tempcss = {columnGap: colGap, padding: '1rem 1rem 2rem 1rem'};
+  } else if (width < 1200) {
+    tempcss = {columnGap: colGap, padding: '2rem 1.5rem 2rem 1.5rem'};
   } else {
-    tempcss = {gap: '5rem', padding: '2rem 5rem 4rem 5rem'};
+    tempcss = {columnGap: colGap, padding: '2rem 5rem 4rem 5rem'};
   }
 
 
@@ -37,15 +41,14 @@ function App() {
             className="d-inline-block align-top"
             alt="EXBT logo" 
           /> 
-          {/* <p>{width}</p> */}
         </Navbar.Brand>
       </Container>
       </Navbar>
 
       <div className="wrapper" style={tempcss}>
-        <Card number={1} />
-        <CardImage img={Pic1} pad='25' light={1}/>
-        <Card number={2}/>
+        <Card number={1} y ={600}/>
+        <CardImage img={Pic1} pad='25' />
+        <Card number={2} />
         <CardImage img={Pic2} pad='50'/>
 
       </div>

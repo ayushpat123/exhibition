@@ -1,12 +1,12 @@
 import React from "react";
 import Sketch from "react-p5";
 
-const canvasWidth = 300;
-const canvasHeight = 300;
-
 const size = 15;
   
 const Art2 = (props) => {
+  const canvasWidth = props.x;
+  const canvasHeight = props.y;
+
   const setup = (p5, canvasParentRef) => {
     // use parent to render the canvas in this ref
     // (without that p5 will render the canvas outside of your component)
