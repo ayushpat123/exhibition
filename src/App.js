@@ -66,6 +66,8 @@ function App() {
         <CardImage img='https://lh3.googleusercontent.com/wjbxsq0FZvMx2gHZw75N4K1i5zEkCSDA1mkBe4ujB7_DpBrg2gYuhuDr2v4rawkQK8XdJSMCgwSmEq7_GhDGJMg4rTfPqhPDyYJbr9DO7RwsaYIG4emmP6aWIuIPYpFMO_b2EB1UxAg=w2400' pad='0' y={y}/>
         <CardImage img='https://lh3.googleusercontent.com/MUhIjR6Q599UtmwJsB4ZsOny8SWM-H1ycSxmrcqje-XudovIhzEVQB_Qcdjt0mRFaxjNUrUjd0PCN1fEqR5kzn-tq-4_Gi1amvMko_ROV-vT7fveppXyrj6uHEpn4wu4LQiE7TeSS88=w2400' pad='10' y={y}/>
         <CardImage img='https://lh3.googleusercontent.com/I-QWDiyoGgwcRmp9PfZvCqOEkH81fxzDNAV_Rq9VIKzjMhOXX7JRyL-fXRXqndhRBM5aPG-M5ib8-PTujSxezOpB3LxzJa8s-z6vyl2PPAcbgN31Nt-oJvFchLKxBX-9lNWlQ7KiZ7Y=w2400' pad='10'/>
+        <CardImage img='https://ipfs.io/ipfs/QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt' pad='40'/>
+        
       </div>
     </div>
     
