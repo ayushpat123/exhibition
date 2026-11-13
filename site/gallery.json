@@ -299,8 +299,8 @@
     "blue-seascape": {
       "id": "blue-seascape",
       "type": "photo",
-      "title": "Blue sea",
-      "notes": "",
+      "title": "Reinebringen",
+      "notes": "During the trek to Reinebringen, Reine.",
       "image": {
         "src": "./assets/blue-seascape.jpg",
         "width": 1280,
@@ -366,6 +366,16 @@
         "source": "sampled-image",
         "method": "median-cut-5-srgb",
         "sampleMaxEdge": 100
+      },
+      "capture": {
+        "date": "2026-07-13",
+        "time": "01:10",
+        "timeBasis": "local time supplied by photographer",
+        "location": {
+          "town": "Reine",
+          "setting": "Reinebringen trek"
+        },
+        "source": "photographer"
       }
     },
     "canopy": {
@@ -593,8 +603,8 @@
     "red-fish": {
       "id": "red-fish",
       "type": "photo",
-      "title": "Red wall",
-      "notes": "",
+      "title": "Reine",
+      "notes": "Reine town, later the same day.",
       "image": {
         "src": "./assets/red-fish.jpg",
         "width": 1280,
@@ -660,6 +670,16 @@
         "source": "sampled-image",
         "method": "median-cut-5-srgb",
         "sampleMaxEdge": 100
+      },
+      "capture": {
+        "date": "2026-07-13",
+        "time": "14:28",
+        "timeBasis": "local time supplied by photographer",
+        "location": {
+          "town": "Reine",
+          "setting": "Reine town"
+        },
+        "source": "photographer"
       }
     },
     "waves": {

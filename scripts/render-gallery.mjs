@@ -35,6 +35,16 @@ export function validateCatalog(catalog) {
     if (item.type !== 'photo') return;
     assert.equal(typeof item.title, 'string');
     assert.equal(typeof item.notes, 'string');
+    if (item.capture) {
+      const capture = item.capture;
+      assert.match(capture.date, /^\d{4}-\d{2}-\d{2}$/);
+      assert.equal(new Date(`${capture.date}T00:00:00Z`).toISOString().slice(0, 10), capture.date);
+      assert.match(capture.time, /^(?:[01]\d|2[0-3]):[0-5]\d$/);
+      assert.equal(typeof capture.timeBasis, 'string');
+      assert.equal(typeof capture.source, 'string');
+      assert.equal(typeof capture.location.town, 'string');
+      assert.equal(typeof capture.location.setting, 'string');
+    }
     assert.match(item.image.src, /^\.\/assets\/[a-z0-9-]+\.(webp|jpg)$/);
     assert.ok(item.image.width > 0 && item.image.height > 0);
     assert.ok(item.layout.insetPercent >= 0 && item.layout.insetPercent < 50);
@@ -54,6 +64,14 @@ export function validateCatalog(catalog) {
   for (const id of catalog.order) visit(id);
   for (const id of Object.keys(catalog.items)) assert.ok(seen.has(id), `Item missing from layout: ${id}`);
   for (const id of Object.keys(catalog.groups)) assert.ok(seen.has(id), `Group missing from layout: ${id}`);
+}
+
+function captureLabel(capture) {
+  const date = new Intl.DateTimeFormat('en-GB', { dateStyle: 'long', timeZone: 'UTC' })
+    .format(new Date(`${capture.date}T00:00:00Z`));
+  const [hour, minute] = capture.time.split(':');
+  const hours = Number(hour);
+  return `${date} · ${hours % 12 || 12}:${minute} ${hours < 12 ? 'am' : 'pm'}`;
 }
 
 export function renderGallery(catalog) {
@@ -78,7 +96,7 @@ export function renderGallery(catalog) {
   <button class="photo-flip" type="button" data-title="${escape(item.title)}" aria-label="Show notes for ${escape(item.title)}" aria-pressed="false" disabled>
     <span class="photo-rotor">
       <span class="photo-front" aria-hidden="false"><img src="${escape(image.src)}"${responsive} width="${image.width}" height="${image.height}" alt="${escape(image.alt)}"${loading} decoding="async"></span>
-      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(item.title)}</span> ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''}</span><span class="photo-return">Back to photo</span></span>
+      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(item.title)}</span> ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span><span class="photo-return">Back to photo</span></span>
     </span>
   </button>
 </figure>`;

@@ -27,6 +27,7 @@ h1 { margin: 0; line-height: 0; }
 .photo-copy { display: flex; flex-direction: column; gap: 14px; max-height: 100%; overflow-y: auto; font-size: 13px; font-weight: 400; line-height: 1.75; }
 .photo-title { font-size: 12px; letter-spacing: .06em; }
 .photo-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
+.photo-capture { font-size: 11px; }
 .photo-return { font-size: 10px; letter-spacing: .03em; }
 @media (prefers-reduced-motion: reduce) { .photo-rotor { transition: none; } }
 .tile canvas { background: #000; touch-action: pan-y; }

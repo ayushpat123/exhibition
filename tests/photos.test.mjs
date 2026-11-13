@@ -88,3 +88,23 @@ test('Escape restores the image and flipping one card leaves another alone', () 
   assert.equal(a.getAttribute('aria-pressed'), 'false');
   cleanup();
 });
+
+
+test('photographer-supplied local capture details survive publication and format without timezone conversion', () => {
+  const published = JSON.parse(serializeCatalog(catalog));
+  const blue = published.items['blue-seascape'];
+  const red = published.items['red-fish'];
+  assert.equal(blue.capture.date, '2026-07-13');
+  assert.equal(red.capture.date, blue.capture.date);
+  assert.equal(blue.capture.time, '01:10');
+  assert.equal(red.capture.time, '14:28');
+  assert.equal(blue.capture.location.setting, 'Reinebringen trek');
+  assert.equal(red.capture.location.setting, 'Reine town');
+  assert.equal(blue.capture.source, 'photographer');
+  assert.equal(red.capture.source, 'photographer');
+  const html = renderGallery(published);
+  assert.match(html, /13 July 2026 · 1:10 am/);
+  assert.match(html, /13 July 2026 · 2:28 pm/);
+  assert.match(html, /During the trek to Reinebringen, Reine\./);
+  assert.match(html, /Reine town, later the same day\./);
+});

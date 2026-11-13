@@ -83,3 +83,5 @@ Each record stores:
 `order` contains stable item/group IDs; `groups.blue-pair.members` preserves the blue tiles above the blue seascape. Neither order nor flip state is stored in the photo's notes/colour record. Every rendered card has a `data-item-id`, and `#gallery-data` embeds the catalogue for future runtime position changes without a network request. Automatic colour reordering is not enabled yet.
 
 To sample a new photo without changing its file, use `python3 scripts/sample-colors.py path/to/photo.jpg --frame '#000000'` (requires Pillow). For a frameless photo, omit `--frame`. Sampling assumes sRGB and uses median-cut quantization on a maximum 100 px thumbnail; it is a grouping aid, not a colour-calibration measurement.
+
+Photographer-supplied capture details are stored in optional `capture` records: local `date` and `time`, `timeBasis`, `location`, and `source`. Their date/time line is formatted from the record on the photo back; it is not duplicated in free-text notes. These local capture records do not imply a UTC offset or GPS coordinates.
