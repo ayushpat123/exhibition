@@ -76,5 +76,21 @@
     "bytes": 178030,
     "width": 800,
     "height": 855
+  },
+  {
+    "path": "site/assets/blue-seascape.jpg",
+    "bytes": 174681,
+    "width": 1280,
+    "height": 1280,
+    "originalUnmodified": true,
+    "sha256": "8d99359cd2d8575605fbfb1314be6405c8bc14ac75e066774abf5bdff9a286f6"
+  },
+  {
+    "path": "site/assets/red-fish.jpg",
+    "bytes": 234391,
+    "width": 1280,
+    "height": 1280,
+    "originalUnmodified": true,
+    "sha256": "c4637714dd1c962d57a624e29b75a089d072e95ccfe0c402da6956c6849ee743"
   }
 ]

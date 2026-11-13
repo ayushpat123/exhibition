@@ -40,6 +40,8 @@ Pushing `master` tests and builds the site, checks payload budgets and asset ref
 
 The seven working images were recovered from the original repository and its Google-hosted image URLs on 2026-11-14, then converted to responsive WebP files. See `scripts/image-manifest.json` for dimensions and sizes. Original source URLs and the original sketches remain in Git history, notably commit `da62c8c`.
 
+Two additional photographs (blue seascape and red fish) were added on 2026-11-14 as the exact uploaded JPEG bytes. They use CSS black framing and `object-fit: contain`, with no cropping, colour edits, or recompression. The blue seascape is grouped directly below the blue patterned tile at every screen width. Their checksums are recorded in `scripts/image-manifest.json`.
+
 The final IPFS artwork (`QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt`) could not be retrieved from the gateways checked. Its position now contains an explicit archive link; the page does not make a failing gateway request on startup. This image has not been replaced with invented artwork.
 
 ## Measured changes
