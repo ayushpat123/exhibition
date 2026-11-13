@@ -26,7 +26,7 @@ export function validateBorderRequest(request) {
   assert.equal(typeof request.itemId, 'string', 'Invalid photo ID');
   assert.match(request.itemId, /^[a-z][a-z0-9-]*$/, 'Invalid photo ID');
   assert.equal(typeof request.insetPercent, 'number', 'Border inset must be a number');
-  assert.ok(Number.isFinite(request.insetPercent) && request.insetPercent >= 0 && request.insetPercent <= 30, 'Border inset must be between 0 and 30');
+  assert.ok(Number.isFinite(request.insetPercent) && request.insetPercent >= 0 && request.insetPercent <= 45, 'Border inset must be between 0 and 45');
   assert.equal(typeof request.frameColor, 'string', 'Invalid frame colour');
   assert.match(request.frameColor, /^#[0-9a-f]{6}$/i, 'Frame colour must be a six-digit hex colour');
   return { ...request, frameColor: request.frameColor.toLowerCase() };
@@ -37,7 +37,12 @@ const PHOTOS = {
   'Blue patterned tiles': 'tiles', Riverfront: 'riverfront', 'Yellow stamps': 'stamps',
   Mountains: 'mountains', Canopy: 'canopy', Dome: 'dome', Stairwell: 'stairs',
 };
-const WIDTHS = { None: 0, Thin: 3, Medium: 6, Wide: 12 };
+const WIDTHS = {
+  None: 0, Thin: 3, Narrow: 3, Medium: 6, Wide: 12,
+  'Narrow — 3% (9 px)': 3, 'Medium — 6% (18 px)': 6,
+  'Wide — 12% (36 px)': 12, 'Extra wide — 20% (60 px)': 20,
+  'Very wide — 30% (90 px)': 30,
+};
 const COLOURS = { Black: '#000000', Charcoal: '#111214', Ivory: '#f5f5f0' };
 
 export function borderRequestFromEvent(event, environment, catalog) {
@@ -54,7 +59,7 @@ export function borderRequestFromEvent(event, environment, catalog) {
   if (inputs.width === 'Keep current') insetPercent = item.layout.insetPercent;
   else if (inputs.width === 'Custom') {
     assert.equal(typeof inputs.custom_width, 'string');
-    assert.match(inputs.custom_width, /^\d{1,2}(?:\.\d{1,2})?$/, 'Enter a custom width from 0 to 30');
+    assert.match(inputs.custom_width, /^\d{1,2}(?:\.\d{1,2})?$/, 'Enter a custom width from 0 to 45');
     insetPercent = Number(inputs.custom_width);
   } else {
     assert.ok(Object.hasOwn(WIDTHS, inputs.width), 'Unknown border width');

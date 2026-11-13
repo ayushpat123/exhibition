@@ -18,11 +18,19 @@ on:
           - Dome
           - Stairwell
       width:
-        description: Border width
+        description: Border width per side (px shown for a 300 px tile)
         required: true
         type: choice
         default: Keep current
-        options: [Keep current, None, Thin, Medium, Wide, Custom]
+        options:
+          - Keep current
+          - None
+          - Narrow — 3% (9 px)
+          - Medium — 6% (18 px)
+          - Wide — 12% (36 px)
+          - Extra wide — 20% (60 px)
+          - Very wide — 30% (90 px)
+          - Custom
       colour:
         description: Border colour
         required: true
@@ -30,7 +38,7 @@ on:
         default: Keep current
         options: [Keep current, Black, Charcoal, Ivory, From edges, Custom]
       custom_width:
-        description: 'Custom width percentage (0–30), only if Custom is selected'
+        description: 'Custom % per side (0–45; 1% = 3 px on a 300 px tile). Choose Custom above.'
         type: string
         default: '6'
       custom_colour:

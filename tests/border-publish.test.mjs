@@ -40,7 +40,7 @@ test('only the signed-in owner may use the settings form on master', () => {
 
 test('owner form presets, custom values and keep-current settings resolve correctly', () => {
   const { event, environment } = fixture();
-  for (const [width, expected] of [['None', 0], ['Thin', 3], ['Medium', 6], ['Wide', 12]]) {
+  for (const [width, expected] of [['None', 0], ['Thin', 3], ['Medium', 6], ['Wide', 12], ['Narrow — 3% (9 px)', 3], ['Medium — 6% (18 px)', 6], ['Wide — 12% (36 px)', 12], ['Extra wide — 20% (60 px)', 20], ['Very wide — 30% (90 px)', 30]]) {
     const next = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width } }, environment, catalog);
     assert.equal(next.insetPercent, expected);
   }
@@ -50,11 +50,13 @@ test('owner form presets, custom values and keep-current settings resolve correc
   assert.deepEqual(applyBorderRequest(catalog, current), catalog);
   const custom = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width: 'Custom', custom_width: '9.5', colour: 'Custom', custom_colour: '#AABBCC' } }, environment, catalog);
   assert.equal(custom.insetPercent, 9.5); assert.equal(custom.frameColor, '#aabbcc');
+  const largest = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width: 'Custom', custom_width: '45' } }, environment, catalog);
+  assert.equal(applyBorderRequest(catalog, largest).items['blue-seascape'].layout.insetPercent, 45);
   for (const inputs of [
     { ...event.inputs, photo: 'Unknown' }, { ...event.inputs, width: 'Huge' },
     { ...event.inputs, colour: 'Unknown' }, { ...event.inputs, extra: true },
     { ...event.inputs, width: 'Custom', custom_width: '' },
-    { ...event.inputs, width: 'Custom', custom_width: '31' },
+    { ...event.inputs, width: 'Custom', custom_width: '45.01' },
     { ...event.inputs, width: 'Custom', custom_width: '$(echo unsafe)' },
     { ...event.inputs, colour: 'Custom', custom_colour: 'red;display:none' },
   ]) assert.throws(() => borderRequestFromEvent({ ...event, inputs }, environment, catalog));
@@ -64,11 +66,11 @@ test('border JSON accepts only the precise safe shape and bounded values', () =>
   for (const invalid of [
     null, [], { ...request, schemaVersion: 2 }, { ...request, extra: true },
     { ...request, itemId: '__proto__' }, { ...request, itemId: '$(echo unsafe)' },
-    { ...request, insetPercent: -1 }, { ...request, insetPercent: 30.01 },
+    { ...request, insetPercent: -1 }, { ...request, insetPercent: 45.01 },
     { ...request, insetPercent: Infinity }, { ...request, insetPercent: '6' },
     { ...request, frameColor: '#000' }, { ...request, frameColor: 'red; color: white' },
   ]) assert.throws(() => validateBorderRequest(invalid));
-  for (const insetPercent of [0, 6.25, 30]) assert.equal(validateBorderRequest({ ...request, insetPercent }).insetPercent, insetPercent);
+  for (const insetPercent of [0, 6.25, 30, 40, 45]) assert.equal(validateBorderRequest({ ...request, insetPercent }).insetPercent, insetPercent);
   assert.equal(validateBorderRequest({ ...request, frameColor: '#AABBCC' }).frameColor, '#aabbcc');
 });
 
