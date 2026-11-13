@@ -1,27 +1,52 @@
-name: Github Pages Deploy
+name: Test and deploy EXBT
 
 on:
   push:
-    branches:
-      - "master"
+    branches: [master]
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: exbt-${{ github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build:
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-version: [15.x]
-    
     steps:
-      - name: Checkout
-        uses: actions/checkout@v1
-
-      - name: Install and build
-        run: npm install && npm run build
-      
-      - name: Deploy
-        uses: JamesIves/github-pages-deploy-action@4.1.5
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
-          branch: gh-pages # The branch the action should deploy to.
-          folder: build # The folder the action should deploy.
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm test
+      - run: npm run build
+      - run: node scripts/check-build.mjs
+      - uses: actions/upload-artifact@v4
+        with:
+          name: website
+          path: build
+          include-hidden-files: true
+
+  deploy:
+    if: github.event_name != 'pull_request'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: website
+          path: build
+      - name: Deploy to the existing GitHub Pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build

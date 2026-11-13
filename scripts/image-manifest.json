@@ -1,0 +1,80 @@
+[
+  {
+    "path": "site/assets/riverfront-400.webp",
+    "bytes": 22836,
+    "width": 400,
+    "height": 400
+  },
+  {
+    "path": "site/assets/riverfront-800.webp",
+    "bytes": 76816,
+    "width": 800,
+    "height": 800
+  },
+  {
+    "path": "site/assets/stamps-358.webp",
+    "bytes": 48716,
+    "width": 358,
+    "height": 400
+  },
+  {
+    "path": "site/assets/mountains-400.webp",
+    "bytes": 5880,
+    "width": 400,
+    "height": 180
+  },
+  {
+    "path": "site/assets/mountains-800.webp",
+    "bytes": 19528,
+    "width": 800,
+    "height": 360
+  },
+  {
+    "path": "site/assets/tiles-400.webp",
+    "bytes": 60838,
+    "width": 400,
+    "height": 480
+  },
+  {
+    "path": "site/assets/tiles-800.webp",
+    "bytes": 225900,
+    "width": 800,
+    "height": 961
+  },
+  {
+    "path": "site/assets/canopy-400.webp",
+    "bytes": 113056,
+    "width": 400,
+    "height": 711
+  },
+  {
+    "path": "site/assets/canopy-800.webp",
+    "bytes": 436466,
+    "width": 800,
+    "height": 1422
+  },
+  {
+    "path": "site/assets/dome-400.webp",
+    "bytes": 66620,
+    "width": 400,
+    "height": 711
+  },
+  {
+    "path": "site/assets/dome-800.webp",
+    "bytes": 216678,
+    "width": 800,
+    "height": 1422
+  },
+  {
+    "path": "site/assets/stairs-400.webp",
+    "bytes": 46960,
+    "width": 400,
+    "height": 428
+  },
+  {
+    "path": "site/assets/stairs-800.webp",
+    "bytes": 178030,
+    "width": 800,
+    "height": 855
+  }
+]

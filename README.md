@@ -1,70 +1,63 @@
-# Getting Started with Create React App
+# EXBT
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A lightweight exhibition of the original 2021 generative sketches and photographs.
 
-## Available Scripts
+**Live:** https://ayushpat123.github.io/exhibition/
 
-In the project directory, you can run:
+The gallery is plain HTML and CSS; its two canvas sketches use a single small JavaScript bundle. All startup resources are served from the same host. No React, p5.js, external stylesheets, fonts, trackers, or image gateways are required.
 
-### `yarn start`
+## Develop
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Use Node 24 (`nvm use` if you have nvm), then:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+```sh
+npm ci
+npm test
+npm run build
+node scripts/check-build.mjs
+npm start
+```
 
-### `yarn test`
+`npm start` serves the production build at http://localhost:3000 (requires Python 3). All asset URLs are relative, so the same build works at the domain root or under `/exhibition/`.
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+- `site/index.html`: gallery and accessible image descriptions.
+- `site/styles.css`: the original pale background, dark cards, and responsive grid.
+- `site/assets/`: recovered artwork, responsive WebP variants, and static animation posters.
+- `src/motion.js`: waves, particles, and animation lifecycle.
+- `src/main.js`: motion control.
+- `scripts/build.mjs`: bundles and hashes CSS/JavaScript into `build/`.
+- `tests/motion.test.mjs`: startup, visibility, motion preferences, resize, touch, and timing checks.
 
-### `yarn build`
+The waves retain ten white noise-driven lines and pointer-controlled frequency/amplitude. The particles retain the original accumulating translucent circles. Frame pacing is capped at 60 updates/second, elapsed time controls speed, pixel density is capped at 2, and hidden/offscreen sketches pause automatically. The operating-system reduced-motion preference starts the sketches paused with a visible image. The visitor can toggle motion explicitly.
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+## Hosting
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Pushing `master` tests and builds the site, checks payload budgets and asset references, then updates the existing `gh-pages` branch. GitHub Pages remains configured to serve that branch. Hashed script/style names prevent old bundles being reused after deployment. `version.json` identifies the deployed build.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+`amplify.yml` supplies equivalent Node 24 build instructions for the former AWS Amplify site. Its account settings and deployment status have not been verified; GitHub Pages is the confirmed deployment target.
 
-### `yarn eject`
+## Artwork and recovery
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+The seven working images were recovered from the original repository and its Google-hosted image URLs on 2026-11-14, then converted to responsive WebP files. See `scripts/image-manifest.json` for dimensions and sizes. Original source URLs and the original sketches remain in Git history, notably commit `da62c8c`.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+The final IPFS artwork (`QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt`) could not be retrieved from the gateways checked. Its position now contains an explicit archive link; the page does not make a failing gateway request on startup. This image has not been replaced with invented artwork.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Measured changes
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+Compared with the existing `gh-pages` build at `a170b3a`:
 
-## Learn More
+| Resource | Before | After |
+| --- | ---: | ---: |
+| All JavaScript bundles, uncompressed | 988,826 B | 5,067 B |
+| JavaScript, summed gzip sizes | 243,558 B | 2,317 B |
+| Seven original gallery images | 10,999,508 B | 1,518,324 B across all responsive variants |
+| Render-blocking external stylesheet | 155,845 B | Removed |
+| External resource hosts needed to render | jsDelivr, Google Images, IPFS | None |
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+The new animation posters add 23,672 B and the logo adds 3,565 B. Only one size of each responsive image is requested, and below-fold images are lazy-loaded. These are artifact sizes, not an end-user load-time or FPS measurement.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+Automated lifecycle tests and build integrity checks pass. Individual canvas artwork frames were rendered and visually inspected using native Canvas. Browser automation was disabled during this session, so full-page visual QA, browser performance traces, Safari/iPhone checks, and the corporate network's behavior still require an actual browser check. No claim of a particular device frame rate or cold-load time is made.
 
-### Code Splitting
+## Rollback
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Revert the optimization commit on `master` and push; deployment rebuilds the previous version. Alternatively restore the previous `gh-pages` tree from `a170b3a` in a new commit. Avoid rewriting branch history.
