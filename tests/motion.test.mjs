@@ -169,3 +169,21 @@ test('high-refresh displays do not multiply drawing work', () => {
   assert.equal(rendered, 60);
   gallery.destroy();
 });
+
+test('vertical pointer limits wave displacement to 5–25 percent without changing horizontal frequency', () => {
+  const height = 600;
+  for (const y of [0, 0.5, 1]) {
+    const ctx = context();
+    drawWaves(ctx, 600, height, 0, { x: 0.5, y }, () => 1);
+    const firstPoint = ctx.calls.find(call => call[0] === 'moveTo');
+    const expected = y === 0 ? 30 : y === 0.5 ? 90 : 150;
+    assert.ok(Math.abs(firstPoint[2] - expected) < 1e-9);
+  }
+  const samples = [];
+  for (const x of [0, 1]) {
+    let lastX;
+    drawWaves(context(), 600, height, 0, { x, y: 0.5 }, inputX => { lastX = inputX; return 0; });
+    samples.push(lastX);
+  }
+  assert.deepEqual(samples, [0.5, 2]);
+});

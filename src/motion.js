@@ -9,7 +9,7 @@ export function drawWaves(ctx, width, height, time, pointer, noise) {
   ctx.lineWidth = Math.min(width, height) * 0.0075;
   ctx.lineJoin = 'round';
   const frequency = 0.5 + 1.5 * pointer.x;
-  const amplitude = (0.05 + 0.45 * pointer.y) * height;
+  const amplitude = (0.05 + 0.2 * pointer.y) * height;
   const steps = Math.min(150, Math.max(60, Math.ceil(width / 4)));
   ctx.beginPath();
   for (let row = 0; row < 10; row++) {
@@ -56,7 +56,7 @@ export function createGallery(canvases) {
   function paint(state, delta = 1 / 60) {
     if (!state.width || !state.height) return;
     if (state.canvas.dataset.art === 'waves') {
-      drawWaves(state.ctx, state.width, state.height, activeTime * 0.5, state.pointer, noise);
+      drawWaves(state.ctx, state.width, state.height, activeTime * 0.25, state.pointer, noise);
     } else {
       drawParticles(state.ctx, state.width, state.height, delta);
     }

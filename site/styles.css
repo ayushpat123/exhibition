@@ -34,9 +34,6 @@ h1 { margin: 0; line-height: 0; }
 .tile canvas { background: #000; touch-action: pan-y; }
 .tile canvas[data-art="waves"] { background: #000 url("./assets/waves-poster.webp") center / 100% 100%; }
 .tile canvas[data-art="particles"] { background: #000 url("./assets/particles-poster.webp") center / 100% 100%; }
-.tile--archive a { display: flex; height: 100%; flex-direction: column; align-items: center; justify-content: center; gap: 14px; color: #bababa; text-align: center; text-decoration: none; font-size: 14px; }
-.tile--archive small { color: #999; font-size: 12px; line-height: 1.7; }
-.tile--archive a:hover { color: white; }
 .fallback { position: absolute; inset: 0; display: grid; place-content: center; margin: 24px; color: #bbb; text-align: center; font-size: 13px; }
 @media (min-width: 400px) { .tile--hero, .tile--portrait { grid-row: span 2; } }
 @media (min-width: 752px) { .tile--hero { grid-column: span 2; } }

@@ -1146,16 +1146,6 @@
         "base": "#000000",
         "palette": []
       }
-    },
-    "archive": {
-      "id": "archive",
-      "type": "archive",
-      "url": "https://ipfs.io/ipfs/QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt",
-      "colors": {
-        "frame": null,
-        "base": "#111214",
-        "palette": []
-      }
     }
   },
   "groups": {
@@ -1178,7 +1168,6 @@
     "canopy",
     "dome",
     "stairs",
-    "red-fish",
-    "archive"
+    "red-fish"
   ]
 }

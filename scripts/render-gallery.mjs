@@ -31,7 +31,7 @@ export function validateCatalog(catalog) {
     assert.equal(item.id, id);
     assert.match(item.colors.base, hex);
     if (item.colors.frame !== null) assert.match(item.colors.frame, hex);
-    assert.ok(['photo', 'animation', 'archive'].includes(item.type));
+    assert.ok(['photo', 'animation'].includes(item.type));
     if (item.type !== 'photo') return;
     assert.equal(typeof item.title, 'string');
     assert.equal(typeof item.notes, 'string');
@@ -89,7 +89,6 @@ export function renderGallery(catalog) {
       const description = wave ? 'Animated white waves on black. Move your pointer or touch to change their shape.' : 'Grey circles accumulating across a black canvas';
       return `<figure class="tile${wave ? ' tile--hero' : ''}" data-item-id="${id}" aria-label="${description}"><canvas data-art="${id}" role="img" aria-label="${description}">${description}</canvas><noscript><p class="fallback">Enable JavaScript to see the moving ${wave ? 'waves' : 'particles'}.</p></noscript></figure>`;
     }
-    if (item.type === 'archive') return `<figure class="tile tile--archive" data-item-id="${id}"><a href="${escape(item.url)}" target="_blank" rel="noopener noreferrer"><span>Archived artwork</span><small>Original image unavailable<br>Open archive ↗</small></a></figure>`;
     const image = item.image;
     const color = backColor(item.colors);
     const classes = `tile tile--photo${item.layout.portrait ? ' tile--portrait' : ''}`;

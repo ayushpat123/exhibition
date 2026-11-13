@@ -31,7 +31,7 @@ npm start
 - `scripts/build.mjs`: bundles and hashes CSS/JavaScript into `build/`.
 - `tests/motion.test.mjs`: startup, visibility, motion preferences, resize, touch, and timing checks.
 
-The waves retain ten white noise-driven lines and pointer-controlled frequency/amplitude. The particles retain the original accumulating translucent circles. Frame pacing is capped at 60 updates/second, elapsed time controls speed, pixel density is capped at 2, and hidden/offscreen sketches pause automatically. The operating-system reduced-motion preference starts the sketches paused with a visible image. The visitor can toggle motion explicitly.
+The waves retain ten white noise-driven lines. Moving right increases frequency (more tightly packed bends); moving down increases amplitude (taller waves). The amplitude ranges from 5% to 25% of canvas height, with its former 50% maximum halved. Wave motion now runs at half its previous speed, while the render cadence remains capped at 60 updates/second. The particles retain the original accumulating translucent circles. Frame pacing is capped at 60 updates/second, elapsed time controls speed, pixel density is capped at 2, and hidden/offscreen sketches pause automatically. The operating-system reduced-motion preference starts the sketches paused with a visible image. The visitor can toggle motion explicitly.
 
 ## Hosting
 
@@ -45,7 +45,7 @@ The seven working images were recovered from the original repository and its Goo
 
 Two additional photographs (blue seascape and red fish) were added on 2026-11-14 as the exact uploaded JPEG bytes. They use CSS black framing and `object-fit: contain`, with no cropping, colour edits, or recompression. The blue seascape is grouped directly below the blue patterned tile at every screen width. Their checksums are recorded in `scripts/image-manifest.json`.
 
-The final IPFS artwork (`QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt`) could not be retrieved from the gateways checked. Its position now contains an explicit archive link; the page does not make a failing gateway request on startup. This image has not been replaced with invented artwork.
+The final IPFS artwork (`QmdiGgzfqxVRS4euboQbBpbRaqe4HX3zkDJgouDd18weRt`) could not be retrieved from the gateways checked. The unavailable placeholder and archive link have been removed from the gallery.
 
 ## Measured changes
 
@@ -54,12 +54,12 @@ Compared with the existing `gh-pages` build at `a170b3a`:
 | Resource | Before | After |
 | --- | ---: | ---: |
 | All JavaScript bundles, uncompressed | 988,826 B | 5,854 B |
-| JavaScript, summed gzip sizes | 243,558 B | 2,587 B |
+| JavaScript, summed gzip sizes | 243,558 B | 2,589 B |
 | Seven original gallery images | 10,999,508 B | 1,518,324 B across all responsive variants |
 | Render-blocking external stylesheet | 155,845 B | Removed |
 | External resource hosts needed to render | jsDelivr, Google Images, IPFS | None |
 
-The new animation posters add 23,672 B and the logo adds 3,565 B. Only one size of each responsive image is requested, and below-fold images are lazy-loaded. These are artifact sizes, not an end-user load-time or FPS measurement.
+The new animation posters add 19,964 B and the logo adds 3,565 B. Only one size of each responsive image is requested, and below-fold images are lazy-loaded. These are artifact sizes, not an end-user load-time or FPS measurement.
 
 Automated lifecycle tests and build integrity checks pass. Individual canvas artwork frames were rendered and visually inspected using native Canvas. Browser automation was disabled during this session, so full-page visual QA, browser performance traces, Safari/iPhone checks, and the corporate network's behavior still require an actual browser check. No claim of a particular device frame rate or cold-load time is made.
 
