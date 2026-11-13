@@ -505,12 +505,12 @@
         "originalUnmodified": true
       },
       "layout": {
-        "insetPercent": 6,
+        "insetPercent": 0,
         "fit": "contain",
         "portrait": false
       },
       "colors": {
-        "frame": "#000000",
+        "frame": null,
         "edge": "#204267",
         "edgePalette": [
           {
@@ -1005,12 +1005,12 @@
         "originalUnmodified": true
       },
       "layout": {
-        "insetPercent": 6,
+        "insetPercent": 0,
         "fit": "contain",
         "portrait": false
       },
       "colors": {
-        "frame": "#000000",
+        "frame": null,
         "edge": "#a92622",
         "edgePalette": [
           {

@@ -13,13 +13,13 @@ h1 { margin: 0; line-height: 0; }
 .tile img, .tile canvas { display: block; width: 100%; height: 100%; }
 .tile img { object-fit: cover; padding: var(--inset, 0); }
 .tile-stack { display: grid; grid-template-rows: repeat(2, minmax(0, 1fr)); grid-row: span 2; gap: var(--gap); min-width: 0; }
-/* The same stored surface colour frames the front and fills the back. */
-.tile--photo { background: var(--card-color); }
+/* Keep the stationary layout transparent. Both rotating faces own their frame and shadow. */
+.tile--photo { overflow: visible; background: transparent; box-shadow: none; }
 .photo-flip { position: relative; display: block; width: 100%; height: 100%; padding: 0; border: 0; border-radius: inherit; background: transparent; color: var(--note-color); font: inherit; text-align: left; perspective: 1200px; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .photo-flip:disabled { cursor: default; }
 .photo-flip:focus-visible { outline-offset: -4px; }
-.photo-rotor { position: absolute; inset: 0; display: block; transform-style: preserve-3d; transition: transform 420ms cubic-bezier(.2,.65,.2,1); }
-.photo-front, .photo-back { position: absolute; inset: 0; display: block; border-radius: inherit; background: var(--card-color); -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.photo-rotor { position: absolute; inset: 0; display: block; border-radius: inherit; transform-style: preserve-3d; transition: transform 420ms cubic-bezier(.2,.65,.2,1); }
+.photo-front, .photo-back { position: absolute; inset: 0; display: block; border-radius: inherit; overflow: hidden; background: var(--card-color); box-shadow: 0 2px 20px #0004; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .photo-front { transform: rotateY(0deg); }
 .photo-front img { object-fit: var(--image-fit, cover); }
 .photo-back { display: flex; flex-direction: column; justify-content: center; gap: 24px; padding: clamp(22px, 10%, 36px); transform: rotateY(180deg); }

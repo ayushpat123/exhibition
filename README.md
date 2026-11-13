@@ -69,6 +69,8 @@ Revert the optimization commit on `master` and push; deployment rebuilds the pre
 
 ## Photo backs and notes
 
+The stationary photo wrapper is transparent and unclipped; the rotating front/back faces own the frame surface, corner clipping, and shadow so the entire framed card turns as one object. Both Reine photographs are borderless by default, with their original JPEG bytes preserved.
+
 Click or tap a photo to flip it; click again or press Escape to return. Native buttons also support Enter and Space. Reduced-motion settings make the change immediate. Notes use restrained typography with at least 4.5:1 text contrast. Photos remain visible if JavaScript is unavailable.
 
 Edit `title` and `notes` for the relevant stable ID in `site/gallery.json`, then rebuild and deploy. Notes are published content, not browser storage. Empty notes show just the title; no personal details or location claims have been invented. Newlines in notes are preserved and HTML is escaped.
