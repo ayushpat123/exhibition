@@ -98,3 +98,9 @@ On your phone, open [Set photo borders](https://github.com/ayushpat123/exhibitio
 Only the repository owner's signed-in workflow runs are accepted, with the account checked both in the workflow and update script. Issue submissions cannot publish. No credentials or editor controls are included in the public site. The workflow saves only the selected border, preserves the photo, notes, capture records, and palette data, then tests/builds/deploys the public gallery. A border update takes effect after a short rebuild and page reload.
 
 The workflow explicitly requests the legacy Pages build after updating its deployment branch, because workflow-token pushes do not trigger Pages builds by themselves ([GitHub documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)).
+
+## Card-back typography and locations
+
+Card backs use self-hosted **Courier Prime Regular**, a quiet typewriter face, with a Courier New/monospace fallback and `font-display: swap`. The Latin WOFF2 file is 18,640 B; no external font requests are required. Vendored from `@fontsource/courier-prime` 5.3.0, designed by Alan Dague-Greene for Quote-Unquote Apps ([official font](https://quoteunquoteapps.com/courierprime/)). Its SIL Open Font License is included at `site/assets/CourierPrime-OFL.txt`.
+
+Visible return instructions are omitted; tapping or pressing Escape still restores the image. Every recorded location must include `capture.location.country`; the build validates this and displays the country with the location. Country codes may also be stored. Unknown locations on older images remain unset rather than being guessed. Both Reine photos record Norway (NO). The red Reine photograph has no free-text note; its location and capture date/time remain visible.

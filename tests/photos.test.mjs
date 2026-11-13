@@ -107,5 +107,12 @@ test('photographer-supplied local capture details survive publication and format
   assert.match(html, /13 July 2026 · 1:10 am/);
   assert.match(html, /13 July 2026 · 2:28 pm/);
   assert.match(html, /During the trek to Reinebringen, Reine\./);
-  assert.match(html, /Reine town, later the same day\./);
+  assert.equal(red.notes, '');
+  assert.match(html, /Reine, Norway/);
+  assert.equal(blue.capture.location.country, 'Norway');
+  assert.equal(red.capture.location.country, 'Norway');
+  assert.doesNotMatch(html, /Back to photo|Reine town, later the same day/);
+  const missingCountry = structuredClone(catalog);
+  delete missingCountry.items['red-fish'].capture.location.country;
+  assert.throws(() => validateCatalog(missingCountry), /Locations must include a country/);
 });

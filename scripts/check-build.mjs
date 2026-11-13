@@ -26,18 +26,20 @@ for (const file of cssFiles) {
     assert.ok((await stat(join('build/assets', match[1]))).isFile(), `missing CSS image ${match[1]}`);
   }
 }
-let jsBytes = 0, cssBytes = 0, imageBytes = 0;
+let jsBytes = 0, cssBytes = 0, imageBytes = 0, fontBytes = 0;
 for (const file of await readdir('build/assets')) {
   const path = join('build/assets', file);
   const bytes = (await stat(path)).size;
   if (file.endsWith('.js')) jsBytes += bytes;
   else if (file.endsWith('.css')) cssBytes += bytes;
-  else imageBytes += bytes;
+  else if (file.endsWith('.woff2')) fontBytes += bytes;
+  else if (/\.(webp|png|jpg)$/.test(file)) imageBytes += bytes;
 }
 for (const ref of refs) assert.ok((await stat(join('build', ref))).isFile(), `missing ${ref}`);
 assert.ok(jsBytes < 15000, `JavaScript exceeds budget: ${jsBytes}`);
 assert.ok(cssBytes < 5000, `CSS exceeds budget: ${cssBytes}`);
+assert.ok(fontBytes < 30000, `fonts exceed budget: ${fontBytes}`);
 assert.ok(imageBytes < 2000000, `images exceed budget: ${imageBytes}`);
 const script = [...refs].find(ref => ref.endsWith('.js'));
 const gzipBytes = gzipSync(await readFile(join('build', script))).length;
-console.log(`Build checks passed: ${jsBytes} B JS (${gzipBytes} B gzip), ${cssBytes} B CSS, ${imageBytes} B images (all variants).`);
+console.log(`Build checks passed: ${jsBytes} B JS (${gzipBytes} B gzip), ${cssBytes} B CSS, ${imageBytes} B images (all variants), ${fontBytes} B fonts.`);

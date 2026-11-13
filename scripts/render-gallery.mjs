@@ -44,6 +44,9 @@ export function validateCatalog(catalog) {
       assert.equal(typeof capture.source, 'string');
       assert.equal(typeof capture.location.town, 'string');
       assert.equal(typeof capture.location.setting, 'string');
+      assert.equal(typeof capture.location.country, 'string', 'Locations must include a country');
+      assert.ok(capture.location.country.trim().length > 0, 'Locations must include a country');
+      if (capture.location.countryCode) assert.match(capture.location.countryCode, /^[A-Z]{2}$/);
     }
     assert.match(item.colors.edge, hex);
     assert.match(item.image.src, /^\.\/assets\/[a-z0-9-]+\.(webp|jpg)$/);
@@ -91,13 +94,17 @@ export function renderGallery(catalog) {
     const color = backColor(item.colors);
     const classes = `tile tile--photo${item.layout.portrait ? ' tile--portrait' : ''}`;
     const style = `--inset:${item.layout.insetPercent}%;--image-fit:${item.layout.fit};--card-color:${color};--note-color:${noteColor(color)}`;
+    const location = item.capture?.location;
+    const place = location ? `${location.town}, ${location.country}` : '';
+    const heading = location && item.title === location.town ? place : item.title;
+    const locationLine = location && item.title !== location.town ? `<span class="photo-location">${escape(place)}</span>` : '';
     const responsive = image.srcset ? ` srcset="${escape(image.srcset)}" sizes="${escape(image.sizes)}"` : '';
     const loading = image.priority ? ' fetchpriority="high"' : ' loading="lazy"';
     return `<figure class="${classes}" data-item-id="${id}" style="${style}">
   <button class="photo-flip" type="button" data-title="${escape(item.title)}" aria-label="Show notes for ${escape(item.title)}" aria-pressed="false" disabled>
     <span class="photo-rotor">
       <span class="photo-front" aria-hidden="false"><img src="${escape(image.src)}"${responsive} width="${image.width}" height="${image.height}" alt="${escape(image.alt)}"${loading} decoding="async"></span>
-      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(item.title)}</span> ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span><span class="photo-return">Back to photo</span></span>
+      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(heading)}</span> ${locationLine} ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span></span>
     </span>
   </button>
 </figure>`;

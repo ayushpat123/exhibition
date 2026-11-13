@@ -618,7 +618,9 @@
         "timeBasis": "local time supplied by photographer",
         "location": {
           "town": "Reine",
-          "setting": "Reinebringen trek"
+          "setting": "Reinebringen trek",
+          "country": "Norway",
+          "countryCode": "NO"
         },
         "source": "photographer"
       }
@@ -996,7 +998,7 @@
       "id": "red-fish",
       "type": "photo",
       "title": "Reine",
-      "notes": "Reine town, later the same day.",
+      "notes": "",
       "image": {
         "src": "./assets/red-fish.jpg",
         "width": 1280,
@@ -1118,7 +1120,9 @@
         "timeBasis": "local time supplied by photographer",
         "location": {
           "town": "Reine",
-          "setting": "Reine town"
+          "setting": "Reine town",
+          "country": "Norway",
+          "countryCode": "NO"
         },
         "source": "photographer"
       }

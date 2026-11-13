@@ -9,7 +9,7 @@ await cp('site/assets', 'build/assets', { recursive: true });
 for (const file of ['favicon.ico', 'safari-pinned-tab.svg', 'robots.txt']) await cp(`site/${file}`, `build/${file}`);
 const result = await build({
   entryPoints: ['src/main.js', 'site/styles.css'], bundle: true, minify: true,
-  loader: { '.webp': 'file' }, assetNames: '[name]',
+  loader: { '.webp': 'file', '.woff2': 'file' }, assetNames: '[name]',
   format: 'esm', target: ['safari15', 'chrome100', 'firefox100'],
   outdir: 'build/assets', entryNames: '[name]-[hash]', metafile: true, legalComments: 'eof',
 });
