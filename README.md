@@ -20,7 +20,10 @@ npm start
 
 `npm start` serves the production build at http://localhost:3000 (requires Python 3). All asset URLs are relative, so the same build works at the domain root or under `/exhibition/`.
 
-- `site/index.html`: gallery and accessible image descriptions.
+- `site/index.html`: page shell; the gallery is rendered at build time.
+- `site/gallery.json`: photo records, descriptions, notes, colours, groups, and display order.
+- `scripts/render-gallery.mjs`: validates the catalogue and renders static, accessible photo cards.
+- `src/photos.js`: tap/click/keyboard flip interaction.
 - `site/styles.css`: the original pale background, dark cards, and responsive grid.
 - `site/assets/`: recovered artwork, responsive WebP variants, and static animation posters.
 - `src/motion.js`: waves, particles, and animation lifecycle.
@@ -50,8 +53,8 @@ Compared with the existing `gh-pages` build at `a170b3a`:
 
 | Resource | Before | After |
 | --- | ---: | ---: |
-| All JavaScript bundles, uncompressed | 988,826 B | 5,067 B |
-| JavaScript, summed gzip sizes | 243,558 B | 2,317 B |
+| All JavaScript bundles, uncompressed | 988,826 B | 5,854 B |
+| JavaScript, summed gzip sizes | 243,558 B | 2,587 B |
 | Seven original gallery images | 10,999,508 B | 1,518,324 B across all responsive variants |
 | Render-blocking external stylesheet | 155,845 B | Removed |
 | External resource hosts needed to render | jsDelivr, Google Images, IPFS | None |
@@ -63,3 +66,20 @@ Automated lifecycle tests and build integrity checks pass. Individual canvas art
 ## Rollback
 
 Revert the optimization commit on `master` and push; deployment rebuilds the previous version. Alternatively restore the previous `gh-pages` tree from `a170b3a` in a new commit. Avoid rewriting branch history.
+
+## Photo backs and notes
+
+Click or tap a photo to flip it; click again or press Escape to return. Native buttons also support Enter and Space. Reduced-motion settings make the change immediate. Notes use restrained typography with at least 4.5:1 text contrast. Photos remain visible if JavaScript is unavailable.
+
+Edit `title` and `notes` for the relevant stable ID in `site/gallery.json`, then rebuild and deploy. Notes are published content, not browser storage. Empty notes show just the title; no personal details or location claims have been invented. Newlines in notes are preserved and HTML is escaped.
+
+Each record stores:
+
+- `colors.frame`: the exact displayed frame colour, or `null` for frameless images.
+- `colors.base`: the dominant sampled image colour. Back colour resolves to frame first, then base.
+- `colors.palette`: five weighted swatches, each with hex and OKLCH lightness, chroma, and hue. These support future perceptual colour matching rather than comparisons of hex strings.
+- `layout`: image fit, frame inset percentage, and portrait sizing.
+
+`order` contains stable item/group IDs; `groups.blue-pair.members` preserves the blue tiles above the blue seascape. Neither order nor flip state is stored in the photo's notes/colour record. Every rendered card has a `data-item-id`, and `#gallery-data` embeds the catalogue for future runtime position changes without a network request. Automatic colour reordering is not enabled yet.
+
+To sample a new photo without changing its file, use `python3 scripts/sample-colors.py path/to/photo.jpg --frame '#000000'` (requires Pillow). For a frameless photo, omit `--frame`. Sampling assumes sRGB and uses median-cut quantization on a maximum 100 px thumbnail; it is a grouping aid, not a colour-calibration measurement.

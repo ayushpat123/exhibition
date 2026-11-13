@@ -1,3 +1,4 @@
+import { renderGallery, serializeCatalog } from './render-gallery.mjs';
 import { build } from 'esbuild';
 import { cp, mkdir, readFile, rm, writeFile } from 'node:fs/promises';
 import { createHash } from 'node:crypto';
@@ -15,7 +16,11 @@ const result = await build({
 const outputs = Object.entries(result.metafile.outputs);
 const js = outputs.find(([, value]) => value.entryPoint === 'src/main.js')[0].replace('build/', './');
 const css = outputs.find(([, value]) => value.entryPoint === 'site/styles.css')[0].replace('build/', './');
-const html = (await readFile('site/index.html', 'utf8')).replace('./src/main.js', js).replace('./styles.css', css);
+const catalog = JSON.parse(await readFile('site/gallery.json', 'utf8'));
+const html = (await readFile('site/index.html', 'utf8'))
+  .replace('./src/main.js', js).replace('./styles.css', css)
+  .replace('<!-- GALLERY -->', renderGallery(catalog))
+  .replace('<!-- GALLERY_DATA -->', serializeCatalog(catalog));
 await writeFile('build/index.html', html);
 await writeFile('build/.nojekyll', '');
 const version = createHash('sha256').update(html).digest('hex').slice(0, 12);
