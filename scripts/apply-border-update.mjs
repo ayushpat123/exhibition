@@ -5,7 +5,6 @@ import { validateCatalog } from './render-gallery.mjs';
 
 const OWNER = 'ayushpat123';
 const REPOSITORY = `${OWNER}/exhibition`;
-const TITLE_PREFIX = 'EXBT borders: ';
 const REQUEST_KEYS = ['frameColor', 'insetPercent', 'itemId', 'schemaVersion'];
 
 export function authorizeBorderEvent(event, environment) {
@@ -17,14 +16,7 @@ export function authorizeBorderEvent(event, environment) {
   assert.equal(environment.GITHUB_TRIGGERING_ACTOR ?? environment.GITHUB_ACTOR, OWNER, 'Only the owner may rerun publishing');
   assert.equal(event.sender?.login, OWNER, 'Only an owner event may publish');
   assert.equal(environment.GITHUB_REF, 'refs/heads/master', 'Publishing must use master');
-  if (environment.GITHUB_EVENT_NAME === 'issues') {
-    assert.equal(event.action, 'opened', 'Only newly opened issues publish');
-    assert.equal(event.issue?.user?.login, OWNER, 'Only owner-authored issues publish');
-    assert.equal(typeof event.issue?.title, 'string', 'Missing issue title');
-    assert.ok(event.issue.title.startsWith(TITLE_PREFIX), 'Not a border publishing issue');
-  } else {
-    assert.equal(environment.GITHUB_EVENT_NAME, 'workflow_dispatch', 'Unsupported publishing event');
-  }
+  assert.equal(environment.GITHUB_EVENT_NAME, 'workflow_dispatch', 'Only the owner settings form may publish');
 }
 
 export function validateBorderRequest(request) {
@@ -40,21 +32,43 @@ export function validateBorderRequest(request) {
   return { ...request, frameColor: request.frameColor.toLowerCase() };
 }
 
-export function borderRequestFromEvent(event, environment) {
+const PHOTOS = {
+  'Blue boat — Reinebringen': 'blue-seascape', 'Red wall — Reine': 'red-fish',
+  'Blue patterned tiles': 'tiles', Riverfront: 'riverfront', 'Yellow stamps': 'stamps',
+  Mountains: 'mountains', Canopy: 'canopy', Dome: 'dome', Stairwell: 'stairs',
+};
+const WIDTHS = { None: 0, Thin: 3, Medium: 6, Wide: 12 };
+const COLOURS = { Black: '#000000', Charcoal: '#111214', Ivory: '#f5f5f0' };
+
+export function borderRequestFromEvent(event, environment, catalog) {
   authorizeBorderEvent(event, environment);
-  let json;
-  if (environment.GITHUB_EVENT_NAME === 'issues') {
-    assert.equal(typeof event.issue.body, 'string', 'Missing border request body');
-    assert.ok(event.issue.body.length <= 16384, 'Border request body is too large');
-    const blocks = [...event.issue.body.matchAll(/^```json[ \t]*\r?\n([\s\S]*?)\r?\n```[ \t]*$/gm)];
-    assert.equal(blocks.length, 1, 'Expected exactly one fenced JSON border request');
-    json = blocks[0][1];
+  const inputs = event.inputs;
+  assert.ok(inputs && typeof inputs === 'object' && !Array.isArray(inputs), 'Missing owner settings');
+  const allowed = ['photo', 'width', 'colour', 'custom_width', 'custom_colour'];
+  for (const key of Object.keys(inputs)) assert.ok(allowed.includes(key), 'Unknown form field');
+  assert.ok(Object.hasOwn(PHOTOS, inputs.photo), 'Unknown photo');
+  const itemId = PHOTOS[inputs.photo];
+  assert.ok(Object.hasOwn(catalog.items, itemId), 'Photo is missing');
+  const item = catalog.items[itemId];
+  let insetPercent;
+  if (inputs.width === 'Keep current') insetPercent = item.layout.insetPercent;
+  else if (inputs.width === 'Custom') {
+    assert.equal(typeof inputs.custom_width, 'string');
+    assert.match(inputs.custom_width, /^\d{1,2}(?:\.\d{1,2})?$/, 'Enter a custom width from 0 to 30');
+    insetPercent = Number(inputs.custom_width);
   } else {
-    json = event.inputs?.border_json;
+    assert.ok(Object.hasOwn(WIDTHS, inputs.width), 'Unknown border width');
+    insetPercent = WIDTHS[inputs.width];
   }
-  assert.equal(typeof json, 'string', 'Missing border JSON');
-  assert.ok(json.length <= 4096, 'Border JSON is too large');
-  return validateBorderRequest(JSON.parse(json));
+  let frameColor;
+  if (inputs.colour === 'Keep current') frameColor = item.colors.frame ?? item.colors.edge ?? item.colors.base;
+  else if (inputs.colour === 'From edges') frameColor = item.colors.edge;
+  else if (inputs.colour === 'Custom') frameColor = inputs.custom_colour;
+  else {
+    assert.ok(Object.hasOwn(COLOURS, inputs.colour), 'Unknown border colour');
+    frameColor = COLOURS[inputs.colour];
+  }
+  return validateBorderRequest({ schemaVersion: 1, itemId, insetPercent, frameColor });
 }
 
 export function applyBorderRequest(catalog, request) {
@@ -72,9 +86,10 @@ export function applyBorderRequest(catalog, request) {
 
 async function main() {
   const event = JSON.parse(await readFile(process.env.GITHUB_EVENT_PATH, 'utf8'));
-  const request = borderRequestFromEvent(event, process.env);
+  authorizeBorderEvent(event, process.env);
   const path = 'site/gallery.json';
   const catalog = JSON.parse(await readFile(path, 'utf8'));
+  const request = borderRequestFromEvent(event, process.env, catalog);
   const next = applyBorderRequest(catalog, request);
   const changed = JSON.stringify(next) !== JSON.stringify(catalog);
   if (changed) await writeFile(path, JSON.stringify(next, null, 2) + '\n');

@@ -10,6 +10,7 @@ const catalog = JSON.parse(await readFile(new URL('../site/gallery.json', import
 test('backs use exact frame colours, falling back to the image base when frameless', () => {
   assert.equal(backColor({ frame: '#000000', base: '#456789' }), '#000000');
   assert.equal(backColor({ frame: null, base: '#456789' }), '#456789');
+  assert.equal(backColor({ frame: null, edge: '#123456', base: '#456789' }), '#123456');
   for (const item of Object.values(catalog.items).filter(item => item.type === 'photo')) {
     const surface = backColor(item.colors);
     assert.ok(contrastRatio(surface, noteColor(surface)) >= 4.5, item.id);

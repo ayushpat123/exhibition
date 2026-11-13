@@ -1,14 +1,42 @@
-name: Publish owner border changes
+name: Set photo borders
 
 on:
-  issues:
-    types: [opened]
   workflow_dispatch:
     inputs:
-      border_json:
-        description: 'Border request JSON (schemaVersion, itemId, insetPercent, frameColor)'
+      photo:
+        description: Photo
         required: true
+        type: choice
+        options:
+          - Blue boat — Reinebringen
+          - Red wall — Reine
+          - Blue patterned tiles
+          - Riverfront
+          - Yellow stamps
+          - Mountains
+          - Canopy
+          - Dome
+          - Stairwell
+      width:
+        description: Border width
+        required: true
+        type: choice
+        default: Keep current
+        options: [Keep current, None, Thin, Medium, Wide, Custom]
+      colour:
+        description: Border colour
+        required: true
+        type: choice
+        default: Keep current
+        options: [Keep current, Black, Charcoal, Ivory, From edges, Custom]
+      custom_width:
+        description: 'Custom width percentage (0–30), only if Custom is selected'
         type: string
+        default: '6'
+      custom_colour:
+        description: 'Custom colour hex, only if Custom is selected'
+        type: string
+        default: '#000000'
 
 permissions: {}
 
@@ -26,11 +54,7 @@ jobs:
       github.triggering_actor == 'ayushpat123' &&
       github.event.sender.login == 'ayushpat123' &&
       github.ref == 'refs/heads/master' &&
-      ((github.event_name == 'issues' &&
-        github.event.action == 'opened' &&
-        github.event.issue.user.login == 'ayushpat123' &&
-        startsWith(github.event.issue.title, 'EXBT borders: ')) ||
-       github.event_name == 'workflow_dispatch')
+      github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
     permissions:
       contents: write

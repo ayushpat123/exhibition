@@ -53,8 +53,8 @@ Compared with the existing `gh-pages` build at `a170b3a`:
 
 | Resource | Before | After |
 | --- | ---: | ---: |
-| All JavaScript bundles, uncompressed | 988,826 B | 9,843 B |
-| JavaScript, summed gzip sizes | 243,558 B | 4,062 B |
+| All JavaScript bundles, uncompressed | 988,826 B | 5,854 B |
+| JavaScript, summed gzip sizes | 243,558 B | 2,587 B |
 | Seven original gallery images | 10,999,508 B | 1,518,324 B across all responsive variants |
 | Render-blocking external stylesheet | 155,845 B | Removed |
 | External resource hosts needed to render | jsDelivr, Google Images, IPFS | None |
@@ -87,12 +87,12 @@ To sample a new photo without changing its file, use `python3 scripts/sample-col
 
 Photographer-supplied capture details are stored in optional `capture` records: local `date` and `time`, `timeBasis`, `location`, and `source`. Their date/time line is formatted from the record on the photo back; it is not duplicated in free-text notes. These local capture records do not imply a UTC offset or GPS coordinates.
 
-## Set borders from a phone
+## Owner-only border settings
 
-Flip any photo, then tap **Border**. The editor offers width presets, a slider, a native colour picker, and black/charcoal/ivory/edge-colour shortcuts. Width is stored as a percentage so frames scale with the tile. Previews change both the front frame and the reverse surface; choosing no border makes the reverse use the image-edge colour. Closing the editor without publishing restores the saved border. Photo files are never altered.
+The public gallery has no border editor, preview controls, publishing links, or owner menu. It only displays the published artwork and photo backs.
 
-**Publish via GitHub** opens a prefilled GitHub issue for confirmation. Sign in as `ayushpat123` and submit it. The owner-only `publish-borders.yml` workflow validates the request, updates only that photo's border in `site/gallery.json`, tests/builds the site, commits the source, and deploys the public gallery. Reload the gallery after the rebuild to see the shared setting on every device. Previewing is immediate; publishing requires confirmation and a rebuild. No GitHub credentials are entered or stored on EXBT.
+On your phone, open [Set photo borders](https://github.com/ayushpat123/exhibition/actions/workflows/publish-borders.yml) while signed into GitHub as `ayushpat123`. Tap **Run workflow**, choose the photo, width and colour, then confirm. Width presets are None/Thin/Medium/Wide (0/3/6/12%), with a custom 0–30% option. Colour presets include Black/Charcoal/Ivory/From edges, with a custom six-digit hex option. Keep current preserves the saved width or colour.
 
-Publishing requests from any other account are ignored. The workflow also accepts owner-only `workflow_dispatch` with a `border_json` input for verification. Issue data is read from the event JSON without shell interpolation; unknown fields, IDs, animations, invalid colours, and widths outside 0–30% are rejected. Normal visitors can preview but cannot publish. The repository's default branch is `master` so the issue workflow is active; the Pages source remains `gh-pages`.
+Only the repository owner's signed-in workflow runs are accepted, with the account checked both in the workflow and update script. Issue submissions cannot publish. No credentials or editor controls are included in the public site. The workflow saves only the selected border, preserves the photo, notes, capture records, and palette data, then tests/builds/deploys the public gallery. A border update takes effect after a short rebuild and page reload.
 
-The workflow explicitly requests the legacy Pages build after updating its deployment branch, because workflow-token pushes do not trigger Pages builds by themselves ([GitHub documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)). Prefilled publishing links use GitHub's documented [issue URL parameters](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue).
+The workflow explicitly requests the legacy Pages build after updating its deployment branch, because workflow-token pushes do not trigger Pages builds by themselves ([GitHub documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)).

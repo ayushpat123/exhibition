@@ -9,51 +9,55 @@ import { applyBorderRequest, authorizeBorderEvent, borderRequestFromEvent, valid
 
 const catalog = JSON.parse(await readFile(new URL('../site/gallery.json', import.meta.url), 'utf8'));
 const request = { schemaVersion: 1, itemId: 'blue-seascape', insetPercent: 6, frameColor: '#000000' };
-function fixture(kind = 'issues') {
+function fixture() {
   const environment = {
     GITHUB_REPOSITORY: 'ayushpat123/exhibition', GITHUB_REPOSITORY_OWNER: 'ayushpat123',
     GITHUB_ACTOR: 'ayushpat123', GITHUB_TRIGGERING_ACTOR: 'ayushpat123',
-    GITHUB_REF: 'refs/heads/master', GITHUB_EVENT_NAME: kind,
+    GITHUB_REF: 'refs/heads/master', GITHUB_EVENT_NAME: 'workflow_dispatch',
   };
   const event = {
     repository: { full_name: 'ayushpat123/exhibition', owner: { login: 'ayushpat123' } },
-    sender: { login: 'ayushpat123' }, action: 'opened',
-    issue: { title: 'EXBT borders: blue-seascape', user: { login: 'ayushpat123' }, body: 'Publish this photo border.\n\n```json\n' + JSON.stringify(request) + '\n```' },
-    inputs: { border_json: JSON.stringify(request) },
+    sender: { login: 'ayushpat123' },
+    inputs: { photo: 'Blue boat — Reinebringen', width: 'Medium', colour: 'Black' },
   };
   return { event, environment };
 }
 
-test('only owner-authored and owner-triggered requests for this master branch are accepted', () => {
-  for (const kind of ['issues', 'workflow_dispatch']) {
-    const { event, environment } = fixture(kind);
-    assert.deepEqual(borderRequestFromEvent(event, environment), request);
-    for (const key of ['GITHUB_REPOSITORY', 'GITHUB_REPOSITORY_OWNER', 'GITHUB_ACTOR', 'GITHUB_TRIGGERING_ACTOR', 'GITHUB_REF']) {
-      assert.throws(() => authorizeBorderEvent(event, { ...environment, [key]: 'visitor' }), key);
-    }
-    const outsider = structuredClone(event); outsider.sender.login = 'visitor';
-    assert.throws(() => authorizeBorderEvent(outsider, environment));
-    const wrongOwner = structuredClone(event); wrongOwner.repository.owner.login = 'visitor';
-    assert.throws(() => authorizeBorderEvent(wrongOwner, environment));
-  }
+test('only the signed-in owner may use the settings form on master', () => {
   const { event, environment } = fixture();
-  event.issue.user.login = 'visitor';
-  assert.throws(() => borderRequestFromEvent(event, environment));
+  assert.deepEqual(borderRequestFromEvent(event, environment, catalog), request);
+  for (const key of ['GITHUB_REPOSITORY', 'GITHUB_REPOSITORY_OWNER', 'GITHUB_ACTOR', 'GITHUB_TRIGGERING_ACTOR', 'GITHUB_REF']) {
+    assert.throws(() => authorizeBorderEvent(event, { ...environment, [key]: 'visitor' }), key);
+  }
+  const outsider = structuredClone(event); outsider.sender.login = 'visitor';
+  assert.throws(() => authorizeBorderEvent(outsider, environment));
+  const wrongOwner = structuredClone(event); wrongOwner.repository.owner.login = 'visitor';
+  assert.throws(() => authorizeBorderEvent(wrongOwner, environment));
+  for (const type of ['issues', 'pull_request', 'push']) {
+    assert.throws(() => borderRequestFromEvent(event, { ...environment, GITHUB_EVENT_NAME: type }, catalog));
+  }
 });
 
-test('non-publishing issues, edited issues, ambiguous JSON, and unsupported events are rejected', () => {
+test('owner form presets, custom values and keep-current settings resolve correctly', () => {
   const { event, environment } = fixture();
-  for (const mutate of [
-    e => { e.issue.title = 'Other issue'; },
-    e => { e.action = 'edited'; },
-    e => { e.issue.body = '{}'; },
-    e => { e.issue.body += '\n```json\n{}\n```'; },
-    e => { e.issue.body = '```json\nnot JSON\n```'; },
-  ]) {
-    const modified = structuredClone(event); mutate(modified);
-    assert.throws(() => borderRequestFromEvent(modified, environment));
+  for (const [width, expected] of [['None', 0], ['Thin', 3], ['Medium', 6], ['Wide', 12]]) {
+    const next = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width } }, environment, catalog);
+    assert.equal(next.insetPercent, expected);
   }
-  assert.throws(() => borderRequestFromEvent(event, { ...environment, GITHUB_EVENT_NAME: 'pull_request' }));
+  const edge = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, colour: 'From edges' } }, environment, catalog);
+  assert.equal(edge.frameColor, catalog.items['blue-seascape'].colors.edge);
+  const current = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width: 'Keep current', colour: 'Keep current' } }, environment, catalog);
+  assert.deepEqual(applyBorderRequest(catalog, current), catalog);
+  const custom = borderRequestFromEvent({ ...event, inputs: { ...event.inputs, width: 'Custom', custom_width: '9.5', colour: 'Custom', custom_colour: '#AABBCC' } }, environment, catalog);
+  assert.equal(custom.insetPercent, 9.5); assert.equal(custom.frameColor, '#aabbcc');
+  for (const inputs of [
+    { ...event.inputs, photo: 'Unknown' }, { ...event.inputs, width: 'Huge' },
+    { ...event.inputs, colour: 'Unknown' }, { ...event.inputs, extra: true },
+    { ...event.inputs, width: 'Custom', custom_width: '' },
+    { ...event.inputs, width: 'Custom', custom_width: '31' },
+    { ...event.inputs, width: 'Custom', custom_width: '$(echo unsafe)' },
+    { ...event.inputs, colour: 'Custom', custom_colour: 'red;display:none' },
+  ]) assert.throws(() => borderRequestFromEvent({ ...event, inputs }, environment, catalog));
 });
 
 test('border JSON accepts only the precise safe shape and bounded values', () => {
@@ -99,8 +103,8 @@ test('CLI rejects an outsider without modifying the catalogue and writes only va
     const path = join(directory, 'site/gallery.json');
     const before = JSON.stringify(catalog, null, 2) + '\n';
     await writeFile(path, before);
-    const { event, environment } = fixture('workflow_dispatch');
-    event.inputs.border_json = JSON.stringify({ ...request, insetPercent: 9.5, frameColor: '#AABBCC' });
+    const { event, environment } = fixture();
+    event.inputs = { photo: 'Blue boat — Reinebringen', width: 'Custom', custom_width: '9.5', colour: 'Custom', custom_colour: '#AABBCC' };
     const eventPath = join(directory, 'event.json');
     const outputPath = join(directory, 'output');
     await writeFile(eventPath, JSON.stringify(event));
