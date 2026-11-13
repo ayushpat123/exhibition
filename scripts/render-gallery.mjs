@@ -94,16 +94,14 @@ export function renderGallery(catalog) {
     const classes = `tile tile--photo${item.layout.portrait ? ' tile--portrait' : ''}`;
     const style = `--inset:${item.layout.insetPercent}%;--image-fit:${item.layout.fit};--card-color:${color};--note-color:${noteColor(color)}`;
     const location = item.capture?.location;
-    const place = location ? `${location.town}, ${location.country}` : '';
-    const heading = location && item.title === location.town ? place : item.title;
-    const locationLine = location && item.title !== location.town ? `<span class="photo-location">${escape(place)}</span>` : '';
+    const heading = location ? `${location.landmark || location.town}, ${location.country}` : item.title;
     const responsive = image.srcset ? ` srcset="${escape(image.srcset)}" sizes="${escape(image.sizes)}"` : '';
     const loading = image.priority ? ' fetchpriority="high"' : ' loading="lazy"';
     return `<figure class="${classes}" data-item-id="${id}" style="${style}">
   <button class="photo-flip" type="button" data-title="${escape(item.title)}" aria-label="Show notes for ${escape(item.title)}" aria-pressed="false" disabled>
     <span class="photo-rotor">
       <span class="photo-front" aria-hidden="false"><img src="${escape(image.src)}"${responsive} width="${image.width}" height="${image.height}" alt="${escape(image.alt)}"${loading} decoding="async"></span>
-      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(heading)}</span> ${locationLine} ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span></span>
+      <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(heading)}</span> ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span></span>
     </span>
   </button>
 </figure>`;

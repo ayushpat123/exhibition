@@ -106,7 +106,10 @@ test('photographer-supplied local capture details survive publication and format
   const html = renderGallery(published);
   assert.match(html, /13 July 2026 · 1:10 am/);
   assert.match(html, /13 July 2026 · 2:28 pm/);
-  assert.match(html, /During the trek to Reinebringen, Reine\./);
+  assert.equal(blue.notes, '');
+  assert.equal(blue.capture.location.landmark, 'Reinebringen');
+  assert.match(html, /Reinebringen, Norway/);
+  assert.doesNotMatch(html, /During the trek/);
   assert.equal(red.notes, '');
   assert.match(html, /Reine, Norway/);
   assert.equal(blue.capture.location.country, 'Norway');

@@ -496,7 +496,7 @@
       "id": "blue-seascape",
       "type": "photo",
       "title": "Reinebringen",
-      "notes": "During the trek to Reinebringen, Reine.",
+      "notes": "",
       "image": {
         "src": "./assets/blue-seascape.jpg",
         "width": 1280,
@@ -620,7 +620,8 @@
           "town": "Reine",
           "setting": "Reinebringen trek",
           "country": "Norway",
-          "countryCode": "NO"
+          "countryCode": "NO",
+          "landmark": "Reinebringen"
         },
         "source": "photographer"
       }

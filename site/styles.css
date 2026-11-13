@@ -23,11 +23,10 @@ h1 { margin: 0; line-height: 0; }
 .photo-front, .photo-back { position: absolute; inset: 0; display: block; border-radius: inherit; overflow: hidden; background: var(--card-color); box-shadow: 0 2px 20px #0004; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .photo-front { transform: rotateY(0deg); }
 .photo-front img { object-fit: var(--image-fit, cover); }
-.photo-back { display: flex; flex-direction: column; justify-content: center; gap: 24px; padding: clamp(22px, 10%, 36px); transform: rotateY(180deg); }
+.photo-back { display: flex; flex-direction: column; justify-content: flex-end; gap: 24px; padding: clamp(22px, 10%, 36px); transform: rotateY(180deg); }
 .photo-flip[aria-pressed="true"] .photo-rotor { transform: rotateY(180deg); }
-.photo-copy { display: flex; flex-direction: column; gap: 14px; max-height: 100%; overflow-y: auto; font-family: "Courier Prime", "Courier New", monospace; font-size: 13px; font-weight: 400; line-height: 1.75; }
+.photo-copy { display: flex; flex-direction: column; gap: 8px; max-height: 100%; overflow-y: auto; font-family: "Courier Prime", "Courier New", monospace; font-size: 13px; font-weight: 400; line-height: 1.75; }
 .photo-title { font-size: 13px; letter-spacing: .015em; }
-.photo-location { font-size: 12px; }
 .photo-notes { white-space: pre-wrap; overflow-wrap: anywhere; }
 .photo-capture { font-size: 11px; }
 @media (prefers-reduced-motion: reduce) { .photo-rotor { transition: none; } }
