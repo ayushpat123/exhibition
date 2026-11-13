@@ -1,0 +1,72 @@
+name: Publish owner border changes
+
+on:
+  issues:
+    types: [opened]
+  workflow_dispatch:
+    inputs:
+      border_json:
+        description: 'Border request JSON (schemaVersion, itemId, insetPercent, frameColor)'
+        required: true
+        type: string
+
+permissions: {}
+
+# Read the newest master after acquiring this lock. Never discard an owner update.
+concurrency:
+  group: exbt-border-publishing
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    if: >-
+      github.repository == 'ayushpat123/exhibition' &&
+      github.repository_owner == 'ayushpat123' &&
+      github.actor == 'ayushpat123' &&
+      github.triggering_actor == 'ayushpat123' &&
+      github.event.sender.login == 'ayushpat123' &&
+      github.ref == 'refs/heads/master' &&
+      ((github.event_name == 'issues' &&
+        github.event.action == 'opened' &&
+        github.event.issue.user.login == 'ayushpat123' &&
+        startsWith(github.event.issue.title, 'EXBT borders: ')) ||
+       github.event_name == 'workflow_dispatch')
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+    steps:
+      - name: Check out the latest trusted source
+        uses: actions/checkout@v4
+        with:
+          ref: master
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Authorize and apply the border request
+        id: border
+        # Input is read from GITHUB_EVENT_PATH, never expanded into shell code.
+        run: node scripts/apply-border-update.mjs
+      - run: npm test
+      - run: npm run build
+      - run: node scripts/check-build.mjs
+      - name: Save only the catalogue change
+        if: steps.border.outputs.changed == 'true'
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add -- site/gallery.json
+          git commit -m 'Update a photo border from owner publishing request'
+          git push origin HEAD:master
+      - name: Deploy the checked build to the existing Pages branch
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: build
+      - name: Request the legacy Pages build explicitly
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # GITHUB_TOKEN pushes do not trigger another workflow or a Pages build.
+        run: gh api --method POST "repos/${GITHUB_REPOSITORY}/pages/builds" --jq '.status'

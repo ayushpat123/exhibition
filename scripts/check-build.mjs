@@ -7,7 +7,7 @@ const html = await readFile('build/index.html', 'utf8');
 const cssFiles = (await readdir('build/assets')).filter(file => file.endsWith('.css'));
 assert.equal(cssFiles.length, 1);
 assert.equal((html.match(/<canvas\b/g) || []).length, 2);
-assert.equal((html.match(/<img\b/g) || []).length, 10, 'logo and nine gallery images');
+assert.equal((html.match(/<img\b/g) || []).length, 11, 'logo, nine gallery images and border preview');
 assert.equal((html.match(/loading="lazy"/g) || []).length, 8);
 assert.equal((html.match(/class="photo-flip"/g) || []).length, 9);
 const catalog = JSON.parse(html.match(/<script id="gallery-data" type="application\/json">([\s\S]*?)<\/script>/)[1]);
@@ -35,7 +35,7 @@ for (const file of await readdir('build/assets')) {
 }
 for (const ref of refs) assert.ok((await stat(join('build', ref))).isFile(), `missing ${ref}`);
 assert.ok(jsBytes < 15000, `JavaScript exceeds budget: ${jsBytes}`);
-assert.ok(cssBytes < 5000, `CSS exceeds budget: ${cssBytes}`);
+assert.ok(cssBytes < 8000, `CSS exceeds budget: ${cssBytes}`);
 assert.ok(imageBytes < 2000000, `images exceed budget: ${imageBytes}`);
 const script = [...refs].find(ref => ref.endsWith('.js'));
 const gzipBytes = gzipSync(await readFile(join('build', script))).length;

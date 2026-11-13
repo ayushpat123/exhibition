@@ -45,6 +45,7 @@ export function validateCatalog(catalog) {
       assert.equal(typeof capture.location.town, 'string');
       assert.equal(typeof capture.location.setting, 'string');
     }
+    assert.match(item.colors.edge, hex);
     assert.match(item.image.src, /^\.\/assets\/[a-z0-9-]+\.(webp|jpg)$/);
     assert.ok(item.image.width > 0 && item.image.height > 0);
     assert.ok(item.layout.insetPercent >= 0 && item.layout.insetPercent < 50);
@@ -99,6 +100,7 @@ export function renderGallery(catalog) {
       <span class="photo-back" aria-hidden="true"><span class="photo-copy"><span class="photo-title">${escape(item.title)}</span> ${item.notes ? `<span class="photo-notes">${escape(item.notes)}</span>` : ''} ${item.capture ? `<span class="photo-capture">${escape(captureLabel(item.capture))}</span>` : ''}</span><span class="photo-return">Back to photo</span></span>
     </span>
   </button>
+  <button class="photo-edit" type="button" data-edit-id="${id}" aria-label="Edit border for ${escape(item.title)}" hidden>Border</button>
 </figure>`;
   }
   return catalog.order.map(render).join('\n');

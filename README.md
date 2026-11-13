@@ -53,8 +53,8 @@ Compared with the existing `gh-pages` build at `a170b3a`:
 
 | Resource | Before | After |
 | --- | ---: | ---: |
-| All JavaScript bundles, uncompressed | 988,826 B | 5,854 B |
-| JavaScript, summed gzip sizes | 243,558 B | 2,587 B |
+| All JavaScript bundles, uncompressed | 988,826 B | 9,843 B |
+| JavaScript, summed gzip sizes | 243,558 B | 4,062 B |
 | Seven original gallery images | 10,999,508 B | 1,518,324 B across all responsive variants |
 | Render-blocking external stylesheet | 155,845 B | Removed |
 | External resource hosts needed to render | jsDelivr, Google Images, IPFS | None |
@@ -76,7 +76,8 @@ Edit `title` and `notes` for the relevant stable ID in `site/gallery.json`, then
 Each record stores:
 
 - `colors.frame`: the exact displayed frame colour, or `null` for frameless images.
-- `colors.base`: the dominant sampled image colour. Back colour resolves to frame first, then base.
+- `colors.base`: the dominant colour of the whole image, retained for future grouping.
+- `colors.edge` and `colors.edgePalette`: colours sampled from the outer 5% band, retained separately from the whole-image palette. Back colour resolves to frame first, then edge, then base as a legacy fallback.
 - `colors.palette`: five weighted swatches, each with hex and OKLCH lightness, chroma, and hue. These support future perceptual colour matching rather than comparisons of hex strings.
 - `layout`: image fit, frame inset percentage, and portrait sizing.
 
@@ -85,3 +86,13 @@ Each record stores:
 To sample a new photo without changing its file, use `python3 scripts/sample-colors.py path/to/photo.jpg --frame '#000000'` (requires Pillow). For a frameless photo, omit `--frame`. Sampling assumes sRGB and uses median-cut quantization on a maximum 100 px thumbnail; it is a grouping aid, not a colour-calibration measurement.
 
 Photographer-supplied capture details are stored in optional `capture` records: local `date` and `time`, `timeBasis`, `location`, and `source`. Their date/time line is formatted from the record on the photo back; it is not duplicated in free-text notes. These local capture records do not imply a UTC offset or GPS coordinates.
+
+## Set borders from a phone
+
+Flip any photo, then tap **Border**. The editor offers width presets, a slider, a native colour picker, and black/charcoal/ivory/edge-colour shortcuts. Width is stored as a percentage so frames scale with the tile. Previews change both the front frame and the reverse surface; choosing no border makes the reverse use the image-edge colour. Closing the editor without publishing restores the saved border. Photo files are never altered.
+
+**Publish via GitHub** opens a prefilled GitHub issue for confirmation. Sign in as `ayushpat123` and submit it. The owner-only `publish-borders.yml` workflow validates the request, updates only that photo's border in `site/gallery.json`, tests/builds the site, commits the source, and deploys the public gallery. Reload the gallery after the rebuild to see the shared setting on every device. Previewing is immediate; publishing requires confirmation and a rebuild. No GitHub credentials are entered or stored on EXBT.
+
+Publishing requests from any other account are ignored. The workflow also accepts owner-only `workflow_dispatch` with a `border_json` input for verification. Issue data is read from the event JSON without shell interpolation; unknown fields, IDs, animations, invalid colours, and widths outside 0–30% are rejected. Normal visitors can preview but cannot publish. The repository's default branch is `master` so the issue workflow is active; the Pages source remains `gh-pages`.
+
+The workflow explicitly requests the legacy Pages build after updating its deployment branch, because workflow-token pushes do not trigger Pages builds by themselves ([GitHub documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site)). Prefilled publishing links use GitHub's documented [issue URL parameters](https://docs.github.com/en/issues/tracking-your-work-with-issues/using-issues/creating-an-issue).

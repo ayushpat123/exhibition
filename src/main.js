@@ -1,7 +1,9 @@
+import { initBorderEditor } from './borders.js';
 import { initPhotos } from './photos.js';
 import { createGallery } from './motion.js';
 
 initPhotos();
+initBorderEditor();
 
 const motion = createGallery([...document.querySelectorAll('canvas[data-art]')]);
 const button = document.querySelector('#motion');

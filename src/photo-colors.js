@@ -1,5 +1,5 @@
 export function backColor(colors) {
-  return colors.frame ?? colors.base;
+  return colors.frame ?? colors.edge ?? colors.base;
 }
 
 function luminance(hex) {

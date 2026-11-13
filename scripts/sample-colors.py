@@ -30,10 +30,14 @@ def oklch(rgb):
     }
 
 
-def sample(path, frame):
+def sampled_image(path):
     with Image.open(path) as original:
         image = ImageOps.exif_transpose(original).convert('RGB')
     image.thumbnail((100, 100))
+    return image
+
+
+def palette_for(image):
     quantized = image.quantize(colors=5, method=Image.Quantize.MEDIANCUT)
     palette = quantized.getpalette()
     total = image.width * image.height
@@ -45,8 +49,24 @@ def sample(path, frame):
             'weight': round(count / total, 5),
             'oklch': oklch(rgb),
         })
+    return swatches
+
+
+def sample(path, frame):
+    image = sampled_image(path)
+    swatches = palette_for(image)
+    width, height = image.size
+    band_x, band_y = max(1, round(width * 0.05)), max(1, round(height * 0.05))
+    pixels = [image.getpixel((x, y)) for y in range(height) for x in range(width)
+              if x < band_x or x >= width - band_x or y < band_y or y >= height - band_y]
+    edge_image = Image.new('RGB', (len(pixels), 1))
+    edge_image.putdata(pixels)
+    edge_palette = palette_for(edge_image)
     return {
         'frame': frame,
+        'edge': edge_palette[0]['hex'],
+        'edgePalette': edge_palette,
+        'edgeBandPercent': 5,
         'base': swatches[0]['hex'],
         'palette': swatches,
         'source': 'sampled-image',
