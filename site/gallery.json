@@ -1008,12 +1008,12 @@
         "originalUnmodified": true
       },
       "layout": {
-        "insetPercent": 12,
+        "insetPercent": 0,
         "fit": "contain",
         "portrait": false
       },
       "colors": {
-        "frame": "#000000",
+        "frame": null,
         "edge": "#a92622",
         "edgePalette": [
           {
