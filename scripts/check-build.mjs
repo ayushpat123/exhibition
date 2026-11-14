@@ -5,7 +5,7 @@ import { gzipSync } from 'node:zlib';
 
 const html = await readFile('build/index.html', 'utf8');
 const cssFiles = (await readdir('build/assets')).filter(file => file.endsWith('.css'));
-assert.equal(cssFiles.length, 1);
+assert.equal(cssFiles.length, 2);
 assert.equal((html.match(/<canvas\b/g) || []).length, 2);
 assert.equal((html.match(/<img\b/g) || []).length, 10, 'logo and nine gallery images');
 assert.equal((html.match(/loading="lazy"/g) || []).length, 8);
@@ -35,9 +35,26 @@ for (const file of await readdir('build/assets')) {
   else if (file.endsWith('.woff2')) fontBytes += bytes;
   else if (/\.(webp|png|jpg)$/.test(file)) imageBytes += bytes;
 }
-for (const ref of refs) assert.ok((await stat(join('build', ref))).isFile(), `missing ${ref}`);
-assert.ok(jsBytes < 15000, `JavaScript exceeds budget: ${jsBytes}`);
-assert.ok(cssBytes < 5000, `CSS exceeds budget: ${cssBytes}`);
+for (const ref of refs) {
+  const path = join('build', ref);
+  const entry = await stat(path);
+  assert.ok(entry.isFile() || (entry.isDirectory() && (await stat(join(path, 'index.html'))).isFile()), `missing ${ref}`);
+}
+for (const [file, jsLimit, cssLimit] of [['index.html', 15000, 5000], ['trees/index.html', 20000, 7000]]) {
+  const page = await readFile(join('build', file), 'utf8');
+  assert.doesNotMatch(page.replace(/<a\b[^>]*>/g, ''), /(?:src|href)="https?:/g, `external startup request in ${file}`);
+  let pageJS = 0, pageCSS = 0;
+  for (const match of page.matchAll(/(?:src|href)="((?:\.\.?\/)[^"?#]+)"/g)) {
+    const directory = file.includes('/') ? 'build/trees' : 'build';
+    const path = join(directory, match[1]);
+    const entry = await stat(path);
+    if (path.endsWith('.js')) pageJS += entry.size;
+    if (path.endsWith('.css')) pageCSS += entry.size;
+  }
+  assert.ok(pageJS < jsLimit, `${file} JS exceeds budget: ${pageJS}`);
+  assert.ok(pageCSS < cssLimit, `${file} CSS exceeds budget: ${pageCSS}`);
+  console.log(`${file}: ${pageJS} B JavaScript, ${pageCSS} B CSS`);
+}
 assert.ok(fontBytes < 30000, `fonts exceed budget: ${fontBytes}`);
 assert.ok(imageBytes < 2000000, `images exceed budget: ${imageBytes}`);
 const script = [...refs].find(ref => ref.endsWith('.js'));

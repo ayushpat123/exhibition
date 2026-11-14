@@ -8,7 +8,7 @@ await mkdir('build/assets', { recursive: true });
 await cp('site/assets', 'build/assets', { recursive: true });
 for (const file of ['favicon.ico', 'safari-pinned-tab.svg', 'robots.txt']) await cp(`site/${file}`, `build/${file}`);
 const result = await build({
-  entryPoints: ['src/main.js', 'site/styles.css'], bundle: true, minify: true,
+  entryPoints: ['src/main.js', 'site/styles.css', 'src/tree-studio.js', 'site/trees/studio.css'], bundle: true, minify: true,
   loader: { '.webp': 'file', '.woff2': 'file' }, assetNames: '[name]',
   format: 'esm', target: ['safari15', 'chrome100', 'firefox100'],
   outdir: 'build/assets', entryNames: '[name]-[hash]', metafile: true, legalComments: 'eof',
@@ -22,8 +22,14 @@ const html = (await readFile('site/index.html', 'utf8'))
   .replace('<!-- GALLERY -->', renderGallery(catalog))
   .replace('<!-- GALLERY_DATA -->', serializeCatalog(catalog));
 await writeFile('build/index.html', html);
+await mkdir('build/trees', { recursive: true });
+const studioJS = outputs.find(([, value]) => value.entryPoint === 'src/tree-studio.js')[0].replace('build/', '../');
+const studioCSS = outputs.find(([, value]) => value.entryPoint === 'site/trees/studio.css')[0].replace('build/', '../');
+const studioHTML = (await readFile('site/trees/index.html', 'utf8'))
+  .replace('./src/tree-studio.js', studioJS).replace('./studio.css', studioCSS);
+await writeFile('build/trees/index.html', studioHTML);
 await writeFile('build/.nojekyll', '');
-const version = createHash('sha256').update(html).digest('hex').slice(0, 12);
+const version = createHash('sha256').update(html).update(studioHTML).digest('hex').slice(0, 12);
 await writeFile('build/version.json', JSON.stringify({ version }) + '\n');
 for (const [file, value] of outputs) console.log(`${file}: ${value.bytes} bytes`);
 console.log(`Build ${version}`);
