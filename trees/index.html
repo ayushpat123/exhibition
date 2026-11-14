@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#faf9fa">
+  <meta name="description" content="A little forest, planted by hand. Tap to grow small groves of original low-poly trees.">
+  <title>Small groves · EXBT</title>
+  <link rel="icon" href="../favicon.ico">
+  <link rel="stylesheet" href="../assets/studio-QOFMNDC5.css">
+  <script type="module" src="../assets/tree-studio-YRIXQAMC.js"></script>
+</head>
+<body>
+  <header class="studio-header"><a href="../" aria-label="Back to EXBT">EXBT</a><span>A small experiment / 01</span></header>
+  <main class="studio-layout">
+    <section class="workspace" aria-labelledby="studio-title">
+      <div class="workspace-heading"><div><p class="eyebrow">Plant something</p><h1 id="studio-title">Small groves.</h1></div><span id="tree-count">0 trees</span></div>
+      <div class="paper"><canvas id="forest" width="1000" height="1000" tabindex="0" role="button" aria-label="Tree canvas. Tap to plant 10 to 20 trees. With a keyboard, use arrow keys to move the planting point and Enter or Space to plant."></canvas><span id="empty-hint" aria-hidden="true">Tap anywhere to plant.</span></div>
+      <div class="workspace-actions"><button id="undo" type="button" disabled>↶ Undo</button><button id="clear" type="button" disabled>Clear</button><button id="save" type="button" class="primary" disabled>Save image ↗</button></div>
+      <p id="studio-status" class="status" role="status" aria-live="polite">Each tap plants 10–20 slightly different trees.</p>
+      <noscript><p class="status">Enable JavaScript to plant your forest.</p></noscript>
+    </section>
+    <aside class="sidebar" aria-label="Planting controls">
+      <section class="control-section"><h2>For your next tap</h2>
+        <label class="control-group" for="density">Trees per tap<select id="density"><option value="auto">10–20, a little different each time</option><option value="10">10 trees</option><option value="15">15 trees</option><option value="20">20 trees</option></select></label>
+        <div class="control-group"><div class="label-row"><label for="tree-size">Tree size</label><output id="size-value" for="tree-size">72</output></div><input id="tree-size" type="range" min="40" max="110" step="1" value="72"></div>
+        <div class="control-group"><div class="label-row"><label for="spread">Spread</label><output id="spread-value" for="spread">94</output></div><input id="spread" type="range" min="35" max="160" step="1" value="94"></div>
+        <label class="control-group" for="palette">Colour family<select id="palette"><option value="forest">Forest greens</option><option value="sage">Sage & olive</option><option value="autumn">Early autumn</option></select></label>
+      </section>
+      <details class="control-section"><summary>Variations & editable copies</summary><div class="details-content">
+        <label class="control-group" for="seed">Seed<input id="seed" type="number" min="0" max="4294967295" step="1" inputmode="numeric" value="12345"></label>
+        <div class="seed-controls"><button id="previous-seed" type="button" aria-label="Previous seed">← Previous</button><button id="next-seed" type="button">Next →</button></div>
+        <div class="seed-controls"><button id="random-seed" type="button">New variation</button><button id="apply-seed" type="button">Use seed</button></div>
+        <div class="seed-controls"><button id="export-scene" type="button">Save editable copy</button><button id="import-scene" type="button">Open a copy</button></div>
+        <input id="scene-file" type="file" accept="application/json,.json" hidden>
+        <button id="reset-controls" type="button" class="reset">Reset planting controls</button>
+        <p class="help">Your drawing stays on this device. Save an editable copy to continue somewhere else.</p>
+      </div></details>
+      <p class="colophon">A gesture becomes a grove.<br>Every tree is made of facets, light, and a little chance.</p>
+    </aside>
+  </main>
+  <dialog id="save-dialog" aria-labelledby="save-heading"><div class="dialog-heading"><h2 id="save-heading">Your little forest.</h2><button id="close-save" type="button" aria-label="Close image preview">✕</button></div><img id="saved-image" alt="Your forest composition on a white canvas"><div class="save-actions"><button id="share-image" type="button" hidden>Share / Save to Photos</button><a id="download-image" download="small-groves.png">Download PNG</a></div></dialog>
+</body>
+</html>
